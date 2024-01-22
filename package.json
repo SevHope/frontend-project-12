@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/SevHope/frontend-project-12#readme",
   "dependencies": {
-    "@hexlet/chat-server": "^2.0.0"
+    "@hexlet/chat-server": "^2.0.0",
+    "bootstrap": "^5.3.2"
   }
 }
