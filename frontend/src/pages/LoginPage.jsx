@@ -35,7 +35,7 @@ const LoginPage = () => {
         console.log(auth, 'auth в логинПэйдж');
         const { from } = location.state;
         navigate(from);
-        navigate('/chat');
+        navigate('/');
       } catch (err) {
         formik.setSubmitting(false);
         if (err.isAxiosError && err.response.status === 401) {

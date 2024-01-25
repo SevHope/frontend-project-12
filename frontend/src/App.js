@@ -58,15 +58,22 @@ const App = () => (
     <Router>
       <Navbar bg="light" expand="lg">
         <Nav className="mr-auto">
-          <Nav.Link as={Link} to="/chat">Chat page</Nav.Link>
+          <Nav.Link as={Link} to="/">Chat page</Nav.Link>
         </Nav>
         <AuthButton />
       </Navbar>
 
       <div className="container p-3">
         <Routes>
-          <Route path="/" element={<ChatPage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route
+            path="/"
+            element={(
+              <PrivateRoute>
+                <ChatPage />
+              </PrivateRoute>
+            )}
+          />
           <Route
             path="/chat"
             element={(
