@@ -28,10 +28,14 @@ const LoginPage = () => {
 
       try {
         const res = await axios.post(routes.loginPath(), values);
+        console.log(res.data, 'res.data');
         localStorage.setItem('userId', JSON.stringify(res.data));
         auth.logIn();
+        console.log(location, 'location');
+        console.log(auth, 'auth в логинПэйдж');
         const { from } = location.state;
         navigate(from);
+        navigate('/chat');
       } catch (err) {
         formik.setSubmitting(false);
         if (err.isAxiosError && err.response.status === 401) {
