@@ -1,10 +1,15 @@
 /* eslint-disable */
 
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useAuth from '../hooks/index.jsx';
-import routes from '../routes.js';
+import { useDispatch } from 'react-redux';
+import useAuth from '../../hooks/index';
+import routes from '../../routes';
+import Channels from '../Channels';
+import Messages from '../Messages';
+import { actions as channelsActions } from '../../slices/channelsSlice';
+import { actions as messagesActions } from '../../slices/messagesSlice';
 
 const getAuthHeader = () => {
   const userId = JSON.parse(localStorage.getItem('userId'));
@@ -13,39 +18,39 @@ const getAuthHeader = () => {
   if (userId && userId.token) {
     return { Authorization: `Bearer ${userId.token}` };
   }
-
   return {};
 };
 
-const ChatPage = () => {
+function ChatPage() {
   const navigate = useNavigate();
   const auth = useAuth();
   console.log(auth, 'auth v chate');
   console.log(localStorage.getItem('userInfo'), 'local');
   console.log(getAuthHeader(), 'getAuth');
   console.log([navigate], 'navigate');
-  const [content, setContent] = useState('');
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(routes.channelsPath(), {
-          headers: getAuthHeader()
+        const response = await axios.get(routes.usersPath(), {
+          headers: getAuthHeader(),
         });
-        setContent(response);
-        // console.log(response, 'response');
-        // console.log(content.data, 'content');
+        console.log(response);
+        dispatch(channelsActions.setChannels(response.data.channels));
+        dispatch(messagesActions.setMessages(response.data.messages));
       } catch (err) {
         console.log(err);
       }
     };
     fetchData();
-  }, []);
+  }, [dispatch, auth]);
 
   return (
     <div className="container h-100 my-4 overflow-hidden rounded shadow">
       <div className="row h-100 bg-white flex-md-row">
-        Welcome to chat
+        <Channels />
+        <Messages />
       </div>
     </div>
   );

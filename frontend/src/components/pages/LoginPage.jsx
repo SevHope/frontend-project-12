@@ -1,14 +1,12 @@
-/* eslint-disable */
-
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import { useFormik } from 'formik';
 import { Button, Form } from 'react-bootstrap';
 import { useLocation, useNavigate } from 'react-router-dom';
-import useAuth from '../hooks/index.jsx';
-import routes from '../routes.js';
+import useAuth from '../../hooks/index';
+import routes from '../../routes';
 
-const LoginPage = () => {
+function LoginPage() {
   const auth = useAuth();
   const [authFailed, setAuthFailed] = useState(false);
   const inputRef = useRef();
@@ -25,7 +23,10 @@ const LoginPage = () => {
     },
     onSubmit: async (values) => {
       setAuthFailed(false);
-      console.log(authFailed, 'authFailed')
+      console.log(authFailed, 'authFailed');
+      axios.post('/api/v1/login', { username: 'admin', password: 'admin' }).then((response) => {
+        console.log(response.data); // => { token: ..., username: 'admin' }
+      });
       try {
         const res = await axios.post(routes.loginPath(), values);
         console.log(res.data, 'res.data');
@@ -33,8 +34,6 @@ const LoginPage = () => {
         auth.logIn();
         console.log(location, 'location');
         console.log(auth, 'auth в логинПэйдж');
-        const { from } = location.state;
-        navigate(from);
         navigate('/');
       } catch (err) {
         formik.setSubmitting(false);
@@ -90,6 +89,6 @@ const LoginPage = () => {
       </div>
     </div>
   );
-};
+}
 
 export default LoginPage;
