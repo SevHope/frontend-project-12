@@ -39,7 +39,7 @@ function ChatPage() {
         const messagesData = await axios.get(routes.messagesPath(), {
           headers: getAuthHeader(),
         });
-        console.log(response.data.channels, 'response v chatPage');
+        console.log(channelsData, 'chanelsData v chatPage');
         console.log(messagesData, 'messagesData');
         dispatch(channelsActions.setChannels(channelsData.data));
         dispatch(messagesActions.setMessages(messagesData.data));

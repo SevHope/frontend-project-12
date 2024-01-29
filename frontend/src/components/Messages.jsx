@@ -7,7 +7,7 @@ function Messages() {
   return (
     <div className="mt-3">
       {messages.messages.length > 0 ? (
-        messages.messages.map((message) => (
+        messages.messages.data.map((message) => (
           <div key={message.id}>
             #
             {message.id}
