@@ -1,5 +1,5 @@
-/* eslint-disable */
-
+/* eslint-disable react/jsx-no-constructed-context-values */
+/* eslint-disable react/prop-types */
 import React, { useState } from 'react';
 import {
   BrowserRouter as Router,
@@ -11,10 +11,10 @@ import {
 } from 'react-router-dom';
 import { Button, Navbar, Nav } from 'react-bootstrap';
 
-import LoginPage from './components/pages/LoginPage.jsx';
-import ChatPage from './components/pages/ChatPage.jsx';
-import AuthContext from './contexts/index.jsx';
-import useAuth from './hooks/index.jsx';
+import LoginPage from './components/pages/LoginPage';
+import ChatPage from './components/pages/ChatPage';
+import AuthContext from './contexts/index';
+import useAuth from './hooks/index';
 
 function AuthProvider({ children }) {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -24,7 +24,6 @@ function AuthProvider({ children }) {
     localStorage.removeItem('userId');
     setLoggedIn(false);
   };
-
   return (
     <AuthContext.Provider value={{ loggedIn, logIn, logOut }}>
       {children}

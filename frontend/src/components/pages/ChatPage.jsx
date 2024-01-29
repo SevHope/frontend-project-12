@@ -33,18 +33,22 @@ function ChatPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(routes.usersPath(), {
+        const channelsData = await axios.get(routes.channelsPath(), {
           headers: getAuthHeader(),
         });
-        console.log(response);
-        dispatch(channelsActions.setChannels(response.data.channels));
-        dispatch(messagesActions.setMessages(response.data.messages));
+        const messagesData = await axios.get(routes.messagesPath(), {
+          headers: getAuthHeader(),
+        });
+        console.log(response.data.channels, 'response v chatPage');
+        console.log(messagesData, 'messagesData');
+        dispatch(channelsActions.setChannels(channelsData.data));
+        dispatch(messagesActions.setMessages(messagesData.data));
       } catch (err) {
         console.log(err);
       }
     };
     fetchData();
-  }, [dispatch, auth]);
+  }, [dispatch, auth, navigate]);
 
   return (
     <div className="container h-100 my-4 overflow-hidden rounded shadow">
