@@ -13,8 +13,8 @@ import { Button, Navbar, Nav } from 'react-bootstrap';
 
 import LoginPage from './components/pages/LoginPage';
 import ChatPage from './components/pages/ChatPage';
-import AuthContext from './contexts/index';
-import useAuth from './hooks/index';
+import AuthContext from './contexts/auth';
+import useAuth from './hooks/auth';
 
 function AuthProvider({ children }) {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -64,27 +64,25 @@ function App() {
           <AuthButton />
         </Navbar>
 
-        <div className="container p-3">
-          <Routes>
-            <Route path="/login" element={<LoginPage />} />
-            <Route
-              path="/"
-              element={(
-                <PrivateRoute>
-                  <ChatPage />
-                </PrivateRoute>
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route
+            path="/"
+            element={(
+              <PrivateRoute>
+                <ChatPage />
+              </PrivateRoute>
             )}
-            />
-            <Route
-              path="/chat"
-              element={(
-                <PrivateRoute>
-                  <ChatPage />
-                </PrivateRoute>
+          />
+          <Route
+            path="/chat"
+            element={(
+              <PrivateRoute>
+                <ChatPage />
+              </PrivateRoute>
             )}
-            />
-          </Routes>
-        </div>
+          />
+        </Routes>
 
       </Router>
     </AuthProvider>

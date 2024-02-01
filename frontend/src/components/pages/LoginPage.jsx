@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useFormik } from 'formik';
 import { Button, Form } from 'react-bootstrap';
 import { useLocation, useNavigate } from 'react-router-dom';
-import useAuth from '../../hooks/index';
+import useAuth from '../../hooks/auth';
 import routes from '../../routes';
 
 function LoginPage() {
@@ -24,14 +24,12 @@ function LoginPage() {
     onSubmit: async (values) => {
       setAuthFailed(false);
       console.log(authFailed, 'authFailed');
-      axios.post('/api/v1/login', { username: 'admin', password: 'admin' }).then((response) => {
-        console.log(response.data); // => { token: ..., username: 'admin' }
-      });
       try {
         const res = await axios.post(routes.loginPath(), values);
         console.log(res.data, 'res.data');
         localStorage.setItem('userId', JSON.stringify(res.data));
         auth.logIn();
+        auth.userName = res.data.username;
         console.log(location, 'location');
         console.log(auth, 'auth в логинПэйдж');
         navigate('/');

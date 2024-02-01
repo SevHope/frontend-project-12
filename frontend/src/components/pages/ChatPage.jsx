@@ -4,7 +4,7 @@ import axios from 'axios';
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import useAuth from '../../hooks/index';
+import useAuth from '../../hooks/auth';
 import routes from '../../routes';
 import Channels from '../Channels';
 import Messages from '../Messages';
@@ -31,6 +31,12 @@ function ChatPage() {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    if (!localStorage.getItem('userId')) {
+      navigate(routes.loginPagePath());
+    }
+  }, [navigate]);
+
+  useEffect(() => {
     const fetchData = async () => {
       try {
         const channelsData = await axios.get(routes.channelsPath(), {
@@ -41,6 +47,7 @@ function ChatPage() {
         });
         console.log(channelsData, 'chanelsData v chatPage');
         console.log(messagesData, 'messagesData');
+        console.log(auth, 'проверяю auth');
         dispatch(channelsActions.setChannels(channelsData.data));
         dispatch(messagesActions.setMessages(messagesData.data));
       } catch (err) {

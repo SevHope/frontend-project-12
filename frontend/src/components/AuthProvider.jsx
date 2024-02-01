@@ -3,12 +3,13 @@ import React, {
   useState, useMemo, useCallback,
 } from 'react';
 import { useNavigate } from 'react-router-dom';
-import AuthContext from '../contexts/index';
+import AuthContext from '../contexts/auth';
 import routes from '../routes';
 
 function AuthProvider({ children }) {
   const navigate = useNavigate();
-  const getUser = JSON.parse(localStorage.getItem('userInfo'));
+  const getUser = JSON.parse(localStorage.getItem('userId'));
+  console.log(getUser, 'getUser');
   const [token, setToken] = useState(getUser ?? null);
 
   const logIn = useCallback((response) => {
