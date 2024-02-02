@@ -10,11 +10,13 @@ import {
   useLocation,
 } from 'react-router-dom';
 import { Button, Navbar, Nav } from 'react-bootstrap';
-
+import { io } from 'socket.io-client';
 import LoginPage from './components/pages/LoginPage';
 import ChatPage from './components/pages/ChatPage';
 import AuthContext from './contexts/auth';
 import useAuth from './hooks/auth';
+import { actions as messagesActions } from './slices/messagesSlice';
+import slice from './slices/index';
 
 function AuthProvider({ children }) {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -54,6 +56,11 @@ function AuthButton() {
 }
 
 function App() {
+  const socket = io();
+
+  socket.on('newMessage', (payload) => {
+    slice.dispatch(messagesActions.addMessage(payload));
+  });
   return (
     <AuthProvider>
       <Router>

@@ -1,17 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Button, Form } from 'react-bootstrap';
 import axios from 'axios';
-import io from 'socket.io-client';
-import { actions as messagesActions } from '../slices/messagesSlice';
+// import { actions as messagesActions } from '../slices/messagesSlice';
 
 function Messages() {
   const messages = useSelector((state) => state.messagesReducer) || [];
   console.log(messages, 'messages');
   const [message, setMessage] = useState('');
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const { token } = JSON.parse(localStorage.getItem('userId'));
-  const socket = io();
 
   const inputRef = useRef();
   useEffect(() => {
@@ -38,15 +36,6 @@ function Messages() {
       console.error('Error sending or fetching messages:', error);
     }
   };
-  useEffect(() => {
-    socket.on('newMessage', (payload) => {
-      console.log(payload, 'payload');
-      dispatch(messagesActions.addMessage(payload));
-    });
-    return () => {
-      socket.off('newMessage');
-    };
-  }, [socket, dispatch]);
 
   return (
     <div className="col p-0 h-100">
