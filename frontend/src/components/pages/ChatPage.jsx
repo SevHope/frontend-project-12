@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import axios from 'axios';
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -51,6 +49,7 @@ function ChatPage() {
         dispatch(channelsActions.setChannels(channelsData.data));
         dispatch(messagesActions.setMessages(messagesData.data));
       } catch (err) {
+        navigate(routes.loginPagePath());
         console.log(err);
       }
     };

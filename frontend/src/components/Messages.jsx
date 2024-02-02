@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, Form } from 'react-bootstrap';
 import axios from 'axios';
-// import useSocket from '../hooks/socket';
+import io from 'socket.io-client';
 import { actions as messagesActions } from '../slices/messagesSlice';
 
 function Messages() {
@@ -11,7 +11,7 @@ function Messages() {
   const [message, setMessage] = useState('');
   const dispatch = useDispatch();
   const { token } = JSON.parse(localStorage.getItem('userId'));
-  // const socketChat = useSocket();
+  const socket = io();
 
   const inputRef = useRef();
   useEffect(() => {
@@ -33,30 +33,20 @@ function Messages() {
           Authorization: `Bearer ${token}`,
         },
       });
-      const response = await axios.get('/api/v1/messages', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      console.log(response.data, 'response.data in sendMessage');
-      dispatch(messagesActions.setMessages(response.data));
       setMessage('');
     } catch (error) {
-      // Handle the error, e.g. display an error message
       console.error('Error sending or fetching messages:', error);
     }
   };
-
-  // useEffect(() => {
-  // sendMessage();
-  // }, [dispatch]);
-  // socketChat.newMessage(message, currentName)
-  // .then(() => {
-  //  setMessage('');
-  // })
-  // .catch((error) => {
-  // console.log('ERROR', error);
-  // });
+  useEffect(() => {
+    socket.on('newMessage', (payload) => {
+      console.log(payload, 'payload');
+      dispatch(messagesActions.addMessage(payload));
+    });
+    return () => {
+      socket.off('newMessage');
+    };
+  }, [socket, dispatch]);
 
   return (
     <div className="col p-0 h-100">
