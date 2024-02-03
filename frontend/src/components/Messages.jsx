@@ -5,11 +5,21 @@ import axios from 'axios';
 // import { actions as messagesActions } from '../slices/messagesSlice';
 
 function Messages() {
-  const messages = useSelector((state) => state.messagesReducer) || [];
-  console.log(messages, 'messages');
+  const allMessages = useSelector((state) => state.messagesReducer.messages) || [];
+  console.log(allMessages, 'allmessages');
   const [message, setMessage] = useState('');
-  // const dispatch = useDispatch();
   const { token } = JSON.parse(localStorage.getItem('userId'));
+  const channelIdActive = useSelector((state) => state.channelsReducer.channelId);
+  console.log(channelIdActive, 'channelidActive');
+  const allChannels = useSelector((state) => state.channelsReducer.channels) || [];
+  const currentChannel = allChannels
+    .filter((channel) => channel.id === channelIdActive);
+  console.log(currentChannel);
+  const channelName = currentChannel[0].name;
+  console.log(channelName, 'channelName');
+  const channelMessages = allMessages
+    .filter((channelMessage) => channelMessage.channelid === channelIdActive);
+  console.log(channelMessages, 'channel.messages');
 
   const inputRef = useRef();
   useEffect(() => {
@@ -23,7 +33,7 @@ function Messages() {
     const currentName = JSON.parse(localStorage.getItem('userId')).username;
     console.log(token, 'token');
     console.log(currentName, 'currentname');
-    const newMessage = { body: message, channelid: '1', username: currentName };
+    const newMessage = { body: message, channelid: channelIdActive, username: currentName };
     console.log(newMessage, 'newMessage');
     try {
       await axios.post('/api/v1/messages', newMessage, {
@@ -43,14 +53,16 @@ function Messages() {
         <div className="bg-light mb-4 p-3 shadow-sm small">
           <p className="m-0">
             <b>
-              # general
+              #
+              {' '}
+              {channelName}
               {' '}
               {' '}
             </b>
           </p>
         </div>
         <div id="messages-box" className="chat-messages overflow-auto px-5 ">
-          {messages.messages.map((item) => (
+          {channelMessages.map((item) => (
             <div key={item.id}>
               {'  '}
               <b>
