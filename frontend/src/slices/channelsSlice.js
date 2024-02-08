@@ -20,7 +20,12 @@ const channelsSlice = createSlice({
       state.channelId = payload;
     },
     moveToChannel(state, { payload }) {
-      state.channelId = payload;
+      console.log(payload, 'payload v movetoChannel');
+      state.channelId = payload.id;
+      console.log(state, 'state posle move');
+    },
+    addChannel(state, { payload }) {
+      state.channels.push(payload);
     },
   },
 });

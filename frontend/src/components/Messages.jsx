@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Button, Form } from 'react-bootstrap';
 import axios from 'axios';
-// import { actions as messagesActions } from '../slices/messagesSlice';
 
 function Messages() {
   const [message, setMessage] = useState('');
@@ -24,6 +23,7 @@ function Messages() {
   const messagesBox = channelMessages.map(({ username, id, body }) => {
     const isCurrentUser = username === JSON.parse(localStorage.getItem('userId')).username;
     const messageClasses = isCurrentUser ? 'bg-light' : 'bg-transparent';
+    console.log('отрисовалось');
     return (
       <div className={`text-break mb-2 ${messageClasses}`} key={id}>
         <b>{username}</b>
@@ -35,6 +35,7 @@ function Messages() {
   });
 
   const activeChannelId = (channelItem) => {
+    console.log(channelItem, 'channelItem');
     const filter = channelItem.find((channel) => channel.id === channelIdActive);
     return filter ? filter.name : 'channels not found';
   };

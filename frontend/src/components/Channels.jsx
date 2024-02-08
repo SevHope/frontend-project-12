@@ -2,14 +2,29 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 /* eslint-disable no-trailing-spaces */
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions as channelsActions } from '../slices/channelsSlice';
+import getModal from './modal/index';
+
+const renderModal = ({ modalInfo, hideModal, setItems }) => {
+  if (!modalInfo.type) {
+    return null;
+  }
+  const Component = getModal(modalInfo.type);
+  return <Component modalInfo={modalInfo} setItems={setItems} onHide={hideModal} />;
+};
 
 function Channels() {
   const dispatch = useDispatch();
   const channels = useSelector((state) => state.channelsReducer) || [];
+  console.log(channels, 'channels v channels');
+  const { token } = JSON.parse(localStorage.getItem('userId'));
+  console.log(token, 'token');
   const channelIdActive = useSelector((state) => state.channelsReducer.channelId);
+  const [modalInfo, setModalInfo] = useState({ type: null, item: null });
+  const hideModal = () => setModalInfo({ type: null, item: null });
+  const showModal = (type, item = null) => setModalInfo({ type, item });
 
   const setChannelActive = (id) => {
     dispatch(channelsActions.setChannelId(id));
@@ -22,6 +37,7 @@ function Channels() {
         <button
           type="button"
           className="p-0 text-primary btn btn-group-vertical"
+          onClick={() => showModal('adding')}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -47,7 +63,8 @@ function Channels() {
             >
               # 
               {' '}
-              {channel.name}
+              { channel.name }
+              {renderModal({ modalInfo, hideModal })}
             </button>
           </li>
         ))}

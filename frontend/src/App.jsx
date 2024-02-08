@@ -16,6 +16,7 @@ import ChatPage from './components/pages/ChatPage';
 import AuthContext from './contexts/auth';
 import useAuth from './hooks/auth';
 import { actions as messagesActions } from './slices/messagesSlice';
+import { actions as channelsActions } from './slices/channelsSlice';
 import slice from './slices/index';
 
 function AuthProvider({ children }) {
@@ -60,6 +61,11 @@ function App() {
 
   socket.on('newMessage', (payload) => {
     slice.dispatch(messagesActions.addMessage(payload));
+  });
+  socket.on('newChannel', (payload) => {
+    console.log(payload, 'payload v soket');
+    slice.dispatch(channelsActions.moveToChannel(payload));
+    slice.dispatch(channelsActions.addChannel(payload));
   });
   return (
     <AuthProvider>
