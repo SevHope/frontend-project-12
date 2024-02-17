@@ -12,7 +12,6 @@ import { actions as messagesActions } from '../../slices/messagesSlice';
 const getAuthHeader = () => {
   const userId = JSON.parse(localStorage.getItem('userId'));
   console.log(userId, 'userId');
-
   if (userId && userId.token) {
     return { Authorization: `Bearer ${userId.token}` };
   }
@@ -23,9 +22,7 @@ function ChatPage() {
   const navigate = useNavigate();
   const auth = useAuth();
   console.log(auth, 'auth v chate');
-  console.log(localStorage.getItem('userInfo'), 'local');
-  console.log(getAuthHeader(), 'getAuth');
-  console.log([navigate], 'navigate');
+  console.log(localStorage.getItem('userId'));
   const dispatch = useDispatch();
 
   useEffect(() => {

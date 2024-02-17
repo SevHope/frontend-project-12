@@ -11,11 +11,13 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import * as yup from 'yup';
 import routes from '../../routes';
+// import { actions as channelsActions } from '../../slices/channelsSlice';
+// import slice from '../../slices/index';
 
 function Add({ onHide }) {
   const allChannels = useSelector((state) => state.channelsReducer.channels) || [];
-  const { token } = JSON.parse(localStorage.getItem('userId'));
-  console.log(token, 'token v Add');
+  const { username, token } = JSON.parse(localStorage.getItem('userId'));
+  // console.log(token, 'token v Add');
   const validateSchema = yup.object().shape({
     name: yup.string().trim()
       .min(3, 'От 3 до 20 символов')
@@ -24,10 +26,11 @@ function Add({ onHide }) {
       .notOneOf(allChannels.map((item) => item.name), 'Должно быть уникальным'),
   });
   const generateOnSubmit = () => async (values, formikBag) => {
-    const newChannel = { name: values.name, removable: true };
+    const newChannel = { name: values.name, removable: true, author: username };
     try {
       await validateSchema.validate(values, { abortEarly: false });
       await axios.post(routes.channelsPath(), newChannel, { headers: { Authorization: `Bearer ${token}` } });
+      console.log(newChannel, 'newChannel');
       onHide();
       formikBag.resetForm();
     } catch (error) {

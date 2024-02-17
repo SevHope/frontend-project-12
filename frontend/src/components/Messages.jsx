@@ -23,7 +23,6 @@ function Messages() {
   const messagesBox = channelMessages.map(({ username, id, body }) => {
     const isCurrentUser = username === JSON.parse(localStorage.getItem('userId')).username;
     const messageClasses = isCurrentUser ? 'bg-light' : 'bg-transparent';
-    console.log('отрисовалось');
     return (
       <div className={`text-break mb-2 ${messageClasses}`} key={id}>
         <b>{username}</b>

@@ -17,6 +17,7 @@ const channelsSlice = createSlice({
       console.log(state, 'state v channelSlice');
     },
     setChannelId(state, { payload }) {
+      console.log(payload, 'payload v setChannelId');
       state.channelId = payload;
     },
     moveToChannel(state, { payload }) {

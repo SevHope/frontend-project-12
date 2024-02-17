@@ -10,6 +10,7 @@ import {
   useLocation,
 } from 'react-router-dom';
 import { Button, Navbar, Nav } from 'react-bootstrap';
+import { useDispatch } from 'react-redux';
 import { io } from 'socket.io-client';
 import LoginPage from './components/pages/LoginPage';
 import ChatPage from './components/pages/ChatPage';
@@ -17,7 +18,6 @@ import AuthContext from './contexts/auth';
 import useAuth from './hooks/auth';
 import { actions as messagesActions } from './slices/messagesSlice';
 import { actions as channelsActions } from './slices/channelsSlice';
-import slice from './slices/index';
 
 function AuthProvider({ children }) {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -36,6 +36,7 @@ function AuthProvider({ children }) {
 
 function PrivateRoute({ children }) {
   const auth = useAuth();
+  console.log(auth, 'auth v APP');
   const location = useLocation();
   console.log(children, 'children');
 
@@ -58,15 +59,23 @@ function AuthButton() {
 
 function App() {
   const socket = io();
+  const dispatch = useDispatch();
 
   socket.on('newMessage', (payload) => {
-    slice.dispatch(messagesActions.addMessage(payload));
+    dispatch(messagesActions.addMessage(payload));
   });
   socket.on('newChannel', (payload) => {
     console.log(payload, 'payload v soket');
-    slice.dispatch(channelsActions.moveToChannel(payload));
-    slice.dispatch(channelsActions.addChannel(payload));
+    const { username } = JSON.parse(localStorage.getItem('userId'));
+    console.log(payload.author, 'payload.author');
+    console.log(username, 'username');
+    if (payload.author === username) {
+      console.log('sovpadenie');
+      dispatch(channelsActions.setChannelId(payload.id));
+    }
+    dispatch(channelsActions.addChannel(payload));
   });
+
   return (
     <AuthProvider>
       <Router>

@@ -27,6 +27,8 @@ function Channels() {
   const showModal = (type, item = null) => setModalInfo({ type, item });
 
   const setChannelActive = (id) => {
+    console.log('bil click');
+    console.log(id, 'id v setChannelId');
     dispatch(channelsActions.setChannelId(id));
   };
   
