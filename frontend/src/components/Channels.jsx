@@ -4,15 +4,27 @@
 /* eslint-disable no-trailing-spaces */
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import Dropdown from 'react-bootstrap/Dropdown';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { actions as channelsActions } from '../slices/channelsSlice';
 import getModal from './modal/index';
 
-const renderModal = ({ modalInfo, hideModal, setItems }) => {
+const renderModal = ({
+  modalInfo, hideModal, setItems,  
+}) => {
+  console.log(modalInfo, 'ModalInfo v renderModal');
   if (!modalInfo.type) {
     return null;
   }
   const Component = getModal(modalInfo.type);
-  return <Component modalInfo={modalInfo} setItems={setItems} onHide={hideModal} />;
+  return (
+    <Component 
+      modalInfo={modalInfo}
+      setItems={setItems}
+      onHide={hideModal}
+      item={modalInfo.item}
+    />
+  );
 };
 
 function Channels() {
@@ -57,20 +69,35 @@ function Channels() {
       <ul id="channels-box" className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block">
         {channels.channels.map((channel) => (
           <li key={channel.id}>
-            <button
-              type="button"
-              id={channel.id}
-              className={channel.id === channelIdActive ? 'w-100 rounded-0 text-start btn btn-secondary' : 'w-100 rounded-0 text-start btn'}
-              onClick={() => setChannelActive(channel.id)}
-            >
-              # 
-              {' '}
-              { channel.name }
-              {renderModal({ modalInfo, hideModal })}
-            </button>
+            <Dropdown as={ButtonGroup}>
+              <button
+                type="button"
+                id={channel.id}
+                className={channel.id === channelIdActive ? 'w-100 rounded-0 text-start btn btn-secondary' : 'w-100 rounded-0 text-start btn'}
+                onClick={() => setChannelActive(channel.id)}
+              >
+                # 
+                {' '}
+                { channel.name }
+              </button>
+              <Dropdown.Toggle split variant="bg-light" id={channel.id} />
+
+              <Dropdown.Menu>
+                <Dropdown.Item 
+                  id={channel.id}
+                  onClick={(e) => showModal('removing', e.target.id)}
+                >
+                  Удалить
+                </Dropdown.Item>
+                <Dropdown.Item onClick={() => showModal('renaming')}>Переименовать</Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
           </li>
         ))}
       </ul>
+      {renderModal({
+        modalInfo, hideModal, 
+      })}
     </div>
   );
 }

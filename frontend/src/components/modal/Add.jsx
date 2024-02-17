@@ -2,7 +2,6 @@
 import React, {
   useEffect, useRef,
 } from 'react';
-// import _ from 'lodash';
 import { useFormik } from 'formik';
 import {
   Modal, FormGroup, FormControl,
@@ -11,13 +10,10 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import * as yup from 'yup';
 import routes from '../../routes';
-// import { actions as channelsActions } from '../../slices/channelsSlice';
-// import slice from '../../slices/index';
 
 function Add({ onHide }) {
   const allChannels = useSelector((state) => state.channelsReducer.channels) || [];
   const { username, token } = JSON.parse(localStorage.getItem('userId'));
-  // console.log(token, 'token v Add');
   const validateSchema = yup.object().shape({
     name: yup.string().trim()
       .min(3, 'От 3 до 20 символов')
@@ -49,9 +45,9 @@ function Add({ onHide }) {
   }, []);
 
   return (
-    <Modal show>
+    <Modal centered show>
       <Modal.Header closeButton onHide={onHide}>
-        <Modal.Title>Введите название канала</Modal.Title>
+        <Modal.Title>Добавить канал</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <form onSubmit={formik.handleSubmit}>
@@ -68,7 +64,8 @@ function Add({ onHide }) {
             <div className="error text-danger">{formik.errors.name}</div>
             )}
           </FormGroup>
-          <input type="submit" className="btn btn-primary mt-2" value="добавить" />
+          <input type="submit" className="btn btn-primary mt-2" value="Отправить" />
+          <input type="reset" className="btn btn-secondary mt-2 ml-2" value="Отменить" onClick={onHide} />
         </form>
       </Modal.Body>
     </Modal>

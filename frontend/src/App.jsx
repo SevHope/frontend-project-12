@@ -75,6 +75,10 @@ function App() {
     }
     dispatch(channelsActions.addChannel(payload));
   });
+  socket.on('removeChannel', (payload) => {
+    console.log(payload, 'payload v socket remove');
+    dispatch(channelsActions.removeChannel(payload));
+  });
 
   return (
     <AuthProvider>

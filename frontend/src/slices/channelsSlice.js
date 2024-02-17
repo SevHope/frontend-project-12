@@ -26,7 +26,15 @@ const channelsSlice = createSlice({
       console.log(state, 'state posle move');
     },
     addChannel(state, { payload }) {
+      console.log(state.channels, 'do dobavlenia');
       state.channels.push(payload);
+    },
+    removeChannel(state, { payload }) {
+      console.log(state.channels, 'do udalenia');
+      const updateChannels = state.channels.filter((channel) => channel.id !== payload.id);
+      state.channels = updateChannels;
+      console.log(updateChannels, 'updatechannels');
+      console.log(state.channels, 'posle');
     },
   },
 });
