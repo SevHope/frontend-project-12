@@ -68,35 +68,55 @@ function Channels() {
       </div>
       <ul id="channels-box" className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block">
         {channels.channels.map((channel) => (
-          <li key={channel.id}>
-            <Dropdown as={ButtonGroup}>
-              <button
-                type="button"
-                id={channel.id}
-                className={channel.id === channelIdActive ? 'w-100 rounded-0 text-start btn btn-secondary' : 'w-100 rounded-0 text-start btn'}
-                onClick={() => setChannelActive(channel.id)}
-              >
-                # 
-                {' '}
-                { channel.name }
-              </button>
-              <Dropdown.Toggle split variant="bg-light" id={channel.id} />
-
-              <Dropdown.Menu>
-                <Dropdown.Item 
+          <li key={channel.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            {channel.removable && (
+              <div style={{ float: 'left' }}>
+                <button
+                  type="button"
                   id={channel.id}
-                  onClick={(e) => showModal('removing', e.target.id)}
+                  className={channel.id === channelIdActive ? 'w-100 rounded-0 text-start btn btn-secondary' : 'w-100 rounded-0 text-start btn'}
+                  onClick={() => setChannelActive(channel.id)}
                 >
-                  Удалить
-                </Dropdown.Item>
-                <Dropdown.Item onClick={() => showModal('renaming')}>Переименовать</Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
+                  # 
+                  {' '}
+                  { channel.name }
+                </button>
+              </div>
+            )}
+            {!channel.removable && (
+              <div style={{ float: 'left' }}> 
+                {' '}
+                <button
+                  type="button"
+                  id={channel.id}
+                  className={channel.id === channelIdActive ? 'w-100 rounded-0 btn btn-secondary' : 'w-100 rounded-0 btn'}
+                  onClick={() => setChannelActive(channel.id)}
+                >
+                  # 
+                  {' '}
+                  { channel.name }
+                </button>
+              </div>
+            )}
+            {channel.removable && (
+              <div style={{ float: 'right' }}>
+                <Dropdown as={ButtonGroup}>
+                  <Dropdown.Toggle split variant="bg-light" id={channel.id} />
+                  <Dropdown.Menu>
+                    <Dropdown.Item id={channel.id} onClick={(e) => showModal('removing', e.target.id)}>
+                      удалить
+                    </Dropdown.Item>
+                    <Dropdown.Item onClick={() => showModal('renaming')}>переименовать</Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              </div>
+            )}
           </li>
         ))}
       </ul>
       {renderModal({
-        modalInfo, hideModal, 
+        modalInfo,
+        hideModal,
       })}
     </div>
   );
