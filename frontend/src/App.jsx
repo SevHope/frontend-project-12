@@ -10,14 +10,14 @@ import {
   useLocation,
 } from 'react-router-dom';
 import { Button, Navbar, Nav } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { io } from 'socket.io-client';
 import LoginPage from './components/pages/LoginPage';
 import ChatPage from './components/pages/ChatPage';
 import AuthContext from './contexts/auth';
 import useAuth from './hooks/auth';
 import { actions as messagesActions } from './slices/messagesSlice';
-import { actions as channelsActions } from './slices/channelsSlice';
+import { actions as channelsActions, defaultChannelId } from './slices/channelsSlice';
 
 function AuthProvider({ children }) {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -48,6 +48,7 @@ function PrivateRoute({ children }) {
 function AuthButton() {
   const auth = useAuth();
   const location = useLocation();
+  console.log(location, 'location v APP');
   console.log(auth, 'auth v app');
 
   return (
@@ -60,7 +61,7 @@ function AuthButton() {
 function App() {
   const socket = io();
   const dispatch = useDispatch();
-
+  const channelIdActive = useSelector((state) => state.channelsReducer.channelId);
   socket.on('newMessage', (payload) => {
     dispatch(messagesActions.addMessage(payload));
   });
@@ -77,6 +78,9 @@ function App() {
   });
   socket.on('removeChannel', (payload) => {
     console.log(payload, 'payload v socket remove');
+    if (payload.id === channelIdActive) {
+      dispatch(channelsActions.setChannelId(defaultChannelId));
+    }
     dispatch(channelsActions.removeChannel(payload));
   });
 
