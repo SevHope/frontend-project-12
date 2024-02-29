@@ -104,9 +104,9 @@ function Channels() {
                   <Dropdown.Toggle split variant="bg-light" id={channel.id} />
                   <Dropdown.Menu>
                     <Dropdown.Item id={channel.id} onClick={(e) => showModal('removing', e.target.id)}>
-                      удалить
+                      Удалить
                     </Dropdown.Item>
-                    <Dropdown.Item onClick={() => showModal('renaming')}>переименовать</Dropdown.Item>
+                    <Dropdown.Item id={channel.id} onClick={(e) => showModal('renaming', e.target.id)}>Переименовать</Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
               </div>

@@ -63,6 +63,7 @@ function App() {
   const dispatch = useDispatch();
   const channelIdActive = useSelector((state) => state.channelsReducer.channelId);
   socket.on('newMessage', (payload) => {
+    console.log('srabotal socket newMessage');
     dispatch(messagesActions.addMessage(payload));
   });
   socket.on('newChannel', (payload) => {
@@ -82,6 +83,10 @@ function App() {
       dispatch(channelsActions.setChannelId(defaultChannelId));
     }
     dispatch(channelsActions.removeChannel(payload));
+  });
+  socket.on('renameChannel', (payload) => {
+    console.log(payload, 'payload v sockete');
+    dispatch(channelsActions.renameChannel(payload));
   });
 
   return (

@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-autofocus */
 /* eslint-disable react/prop-types */
 import React from 'react';
 import {
@@ -15,6 +16,8 @@ async function deleteMessages(channelMessages, token) {
     await Promise.all(channelMessages.map(async (message) => {
       await axios.delete([routes.messagesPath(), message.id].join('/'), { headers: { Authorization: `Bearer ${token}` } });
     }));
+
+    console.log('soobwenia udaleny');
   } catch (error) {
     console.log(error, 'error v udalenii soobchenii');
   }
@@ -41,13 +44,15 @@ function Remove({ onHide, item }) {
     const updatedChannels = allChannels.filter((channel) => channel.id !== item);
     const updatedMessages = allMessages.filter((message) => message.channelid !== item);
     dispatch(channelsActions.setChannels(updatedChannels));
+    console.log(allMessages, 'allMessages posle udalenia kanala');
+    console.log(updatedMessages, 'updatedmessages');
     dispatch(messagesActions.setMessages(updatedMessages));
     onHide();
   };
   console.log(item, 'item v Remove');
   return (
     <Modal show centered>
-      <Modal.Header>
+      <Modal.Header closeButton onHide={onHide}>
         <Modal.Title>Удалить канал</Modal.Title>
       </Modal.Header>
 

@@ -33,6 +33,7 @@ function ChatPage() {
   });
 
   useEffect(() => {
+    console.log('srabotal useEffect v ChatPage');
     const fetchData = async () => {
       try {
         const channelsData = await axios.get(routes.channelsPath(), {

@@ -23,6 +23,7 @@ function Add({ onHide }) {
   });
   const generateOnSubmit = () => async (values, formikBag) => {
     const newChannel = { name: values.name, removable: true, author: username };
+    console.log(values, 'values v Add');
     try {
       await validateSchema.validate(values, { abortEarly: false });
       await axios.post(routes.channelsPath(), newChannel, { headers: { Authorization: `Bearer ${token}` } });

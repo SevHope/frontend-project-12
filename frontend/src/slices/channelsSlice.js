@@ -36,6 +36,12 @@ const channelsSlice = createSlice({
       console.log(updateChannels, 'updatechannels');
       console.log(state.channels, 'posle');
     },
+    renameChannel(state, { payload }) {
+      const renamedChannel = state.channels.find((channel) => channel.id === payload.id);
+      console.log(renamedChannel, 'renamedChannel');
+      renamedChannel.name = payload.name;
+      console.log(state.channels, 'posle pereimenovania');
+    },
   },
 });
 
