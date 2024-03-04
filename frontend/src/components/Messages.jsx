@@ -7,11 +7,8 @@ function Messages() {
   const [message, setMessage] = useState('');
   const { token } = JSON.parse(localStorage.getItem('userId'));
   const allChannels = useSelector((state) => state.channelsReducer.channels) || [];
-  console.log(allChannels, 'allChannels');
   const channelIdActive = useSelector((state) => state.channelsReducer.channelId);
-  console.log(channelIdActive, 'channelidActive');
   const allMessages = useSelector((state) => state.messagesReducer.messages) || [];
-  console.log(allMessages, 'allmessages');
 
   const inputRef = useRef();
   useEffect(() => {
@@ -34,25 +31,22 @@ function Messages() {
   });
 
   const activeChannelId = (channelItem) => {
-    console.log(channelItem, 'channelItem');
     const filter = channelItem.find((channel) => channel.id === channelIdActive);
     return filter ? filter.name : 'channels not found';
   };
 
   const sendMessage = async (e) => {
     e.preventDefault();
-    console.log(localStorage.getItem('userId'), 'localStorage.getItem(userId)');
+    console.log('zapustilsya sendMessage');
     const currentName = JSON.parse(localStorage.getItem('userId')).username;
-    console.log(token, 'token');
-    console.log(currentName, 'currentname');
     const newMessage = { body: message, channelid: channelIdActive, username: currentName };
-    console.log(newMessage, 'newMessage');
     try {
       await axios.post('/api/v1/messages', newMessage, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
+      console.log('otpravlau soobwenie');
       setMessage('');
     } catch (error) {
       console.error('Error sending or fetching messages:', error);
@@ -81,6 +75,7 @@ function Messages() {
               <Form.Control
                 name="body"
                 className="border-0 p-0 ps-2 form-control"
+                placeholder="Введите сообщение..."
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 ref={inputRef}

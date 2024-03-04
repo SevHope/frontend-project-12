@@ -1,10 +1,9 @@
 /* eslint-disable jsx-a11y/no-autofocus */
 /* eslint-disable react/prop-types */
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Modal, FormGroup,
 } from 'react-bootstrap';
-// import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import routes from '../../routes';
@@ -23,22 +22,21 @@ async function deleteMessages(channelMessages, token) {
   }
 }
 function Remove({ onHide, item }) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const dispatch = useDispatch();
   const allChannels = useSelector((state) => state.channelsReducer.channels) || [];
   const allMessages = useSelector((state) => state.messagesReducer.messages) || [];
   const channelMessages = allMessages.filter((message) => message.channelid === item);
-  console.log(channelMessages, 'channelMessages');
   const generateOnSubmit = async (e) => {
     e.preventDefault();
-    console.log('udalenie kanala');
-    console.log(onHide, 'onhide v edalenii');
-    console.log(item, 'item v udalenii');
-    console.log([routes.channelsPath(), item].join('/'), 'posmotret put');
+    setIsSubmitting(true);
     const { token } = JSON.parse(localStorage.getItem('userId'));
     try {
       await axios.delete([routes.channelsPath(), item].join('/'), { headers: { Authorization: `Bearer ${token}` } });
     } catch (error) {
       console.log(error, 'error v udalenii');
+    } finally {
+      setIsSubmitting(false);
     }
     deleteMessages(channelMessages, token);
     const updatedChannels = allChannels.filter((channel) => channel.id !== item);
@@ -60,8 +58,8 @@ function Remove({ onHide, item }) {
         <form onSubmit={generateOnSubmit}>
           <p className="lead">Уверены?</p>
           <FormGroup>
-            <input type="reset" className="btn btn-secondary mt-2" value="Отменить" onClick={onHide} />
-            <input type="submit" className="btn btn-danger mt-2 ml-2" value="Удалить" />
+            <input type="reset" disabled={isSubmitting} className="btn btn-secondary mt-2" value="Отменить" onClick={onHide} />
+            <input type="submit" disabled={isSubmitting} className="btn btn-danger mt-2 ml-2" value="Удалить" />
           </FormGroup>
         </form>
       </Modal.Body>

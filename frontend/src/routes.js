@@ -5,6 +5,8 @@ export default {
   usersPath: () => [apiPath, 'data'].join('/'),
   channelsPath: () => [apiPath, 'channels'].join('/'),
   messagesPath: () => [apiPath, 'messages'].join('/'),
+  registrationPath: () => [apiPath, 'signup'].join('/'),
   loginPagePath: () => '/login',
   chatPagepath: () => '/chat',
+  registrationPagePath: () => '/signup',
 };

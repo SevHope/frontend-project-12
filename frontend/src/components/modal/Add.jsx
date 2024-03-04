@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, {
-  useEffect, useRef,
+  useEffect, useRef, useState,
 } from 'react';
 import { useFormik } from 'formik';
 import {
@@ -12,6 +12,7 @@ import * as yup from 'yup';
 import routes from '../../routes';
 
 function Add({ onHide }) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const allChannels = useSelector((state) => state.channelsReducer.channels) || [];
   const { username, token } = JSON.parse(localStorage.getItem('userId'));
   const validateSchema = yup.object().shape({
@@ -22,16 +23,17 @@ function Add({ onHide }) {
       .notOneOf(allChannels.map((item) => item.name), 'Должно быть уникальным'),
   });
   const generateOnSubmit = () => async (values, formikBag) => {
+    setIsSubmitting(true);
     const newChannel = { name: values.name, removable: true, author: username };
-    console.log(values, 'values v Add');
     try {
       await validateSchema.validate(values, { abortEarly: false });
       await axios.post(routes.channelsPath(), newChannel, { headers: { Authorization: `Bearer ${token}` } });
-      console.log(newChannel, 'newChannel');
       onHide();
       formikBag.resetForm();
     } catch (error) {
       formikBag.setErrors({ name: error.message });
+    } finally {
+      setIsSubmitting(false);
     }
   };
   const formik = useFormik({
@@ -65,8 +67,8 @@ function Add({ onHide }) {
             <div className="error text-danger">{formik.errors.name}</div>
             )}
           </FormGroup>
-          <input type="submit" className="btn btn-primary mt-2" value="Отправить" />
-          <input type="reset" className="btn btn-secondary mt-2 ml-2" value="Отменить" onClick={onHide} />
+          <input type="submit" disabled={isSubmitting} className="btn btn-primary mt-2" value="Отправить" />
+          <input type="reset" disabled={isSubmitting} className="btn btn-secondary mt-2 ml-2" value="Отменить" onClick={onHide} />
         </form>
       </Modal.Body>
     </Modal>

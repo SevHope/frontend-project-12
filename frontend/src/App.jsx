@@ -10,14 +10,12 @@ import {
   useLocation,
 } from 'react-router-dom';
 import { Button, Navbar, Nav } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
-import { io } from 'socket.io-client';
 import LoginPage from './components/pages/LoginPage';
 import ChatPage from './components/pages/ChatPage';
+import RegistrationPage from './components/pages/RegistrationPage';
 import AuthContext from './contexts/auth';
 import useAuth from './hooks/auth';
-import { actions as messagesActions } from './slices/messagesSlice';
-import { actions as channelsActions, defaultChannelId } from './slices/channelsSlice';
+import runInit from './init';
 
 function AuthProvider({ children }) {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -36,9 +34,7 @@ function AuthProvider({ children }) {
 
 function PrivateRoute({ children }) {
   const auth = useAuth();
-  console.log(auth, 'auth v APP');
   const location = useLocation();
-  console.log(children, 'children');
 
   return (
     auth.loggedIn ? children : <Navigate to="/login" state={{ from: location }} />
@@ -48,8 +44,6 @@ function PrivateRoute({ children }) {
 function AuthButton() {
   const auth = useAuth();
   const location = useLocation();
-  console.log(location, 'location v APP');
-  console.log(auth, 'auth v app');
 
   return (
     auth.loggedIn
@@ -59,42 +53,13 @@ function AuthButton() {
 }
 
 function App() {
-  const socket = io();
-  const dispatch = useDispatch();
-  const channelIdActive = useSelector((state) => state.channelsReducer.channelId);
-  socket.on('newMessage', (payload) => {
-    console.log('srabotal socket newMessage');
-    dispatch(messagesActions.addMessage(payload));
-  });
-  socket.on('newChannel', (payload) => {
-    console.log(payload, 'payload v soket');
-    const { username } = JSON.parse(localStorage.getItem('userId'));
-    console.log(payload.author, 'payload.author');
-    console.log(username, 'username');
-    if (payload.author === username) {
-      console.log('sovpadenie');
-      dispatch(channelsActions.setChannelId(payload.id));
-    }
-    dispatch(channelsActions.addChannel(payload));
-  });
-  socket.on('removeChannel', (payload) => {
-    console.log(payload, 'payload v socket remove');
-    if (payload.id === channelIdActive) {
-      dispatch(channelsActions.setChannelId(defaultChannelId));
-    }
-    dispatch(channelsActions.removeChannel(payload));
-  });
-  socket.on('renameChannel', (payload) => {
-    console.log(payload, 'payload v sockete');
-    dispatch(channelsActions.renameChannel(payload));
-  });
-
+  runInit();
   return (
     <AuthProvider>
       <Router>
         <Navbar bg="light" expand="lg">
           <Nav className="mr-auto">
-            <Nav.Link as={Link} to="/">Chat page</Nav.Link>
+            <Nav.Link as={Link} to="/">Hexlet chat</Nav.Link>
           </Nav>
           <AuthButton />
         </Navbar>
@@ -115,6 +80,12 @@ function App() {
               <PrivateRoute>
                 <ChatPage />
               </PrivateRoute>
+            )}
+          />
+          <Route
+            path="/signup"
+            element={(
+              <RegistrationPage />
             )}
           />
         </Routes>

@@ -12,7 +12,6 @@ import getModal from './modal/index';
 const renderModal = ({
   modalInfo, hideModal, setItems,  
 }) => {
-  console.log(modalInfo, 'ModalInfo v renderModal');
   if (!modalInfo.type) {
     return null;
   }
@@ -30,17 +29,12 @@ const renderModal = ({
 function Channels() {
   const dispatch = useDispatch();
   const channels = useSelector((state) => state.channelsReducer) || [];
-  console.log(channels, 'channels v channels');
-  const { token } = JSON.parse(localStorage.getItem('userId'));
-  console.log(token, 'token');
   const channelIdActive = useSelector((state) => state.channelsReducer.channelId);
   const [modalInfo, setModalInfo] = useState({ type: null, item: null });
   const hideModal = () => setModalInfo({ type: null, item: null });
   const showModal = (type, item = null) => setModalInfo({ type, item });
 
   const setChannelActive = (id) => {
-    console.log('bil click');
-    console.log(id, 'id v setChannelId');
     dispatch(channelsActions.setChannelId(id));
   };
   
@@ -79,7 +73,7 @@ function Channels() {
                 >
                   # 
                   {' '}
-                  { channel.name }
+                  {channel.name.length > 10 ? `${channel.name.substring(0, 10)}...` : channel.name}
                 </button>
               </div>
             )}

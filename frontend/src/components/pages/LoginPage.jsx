@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import { useFormik } from 'formik';
 import { Button, Form } from 'react-bootstrap';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import useAuth from '../../hooks/auth';
 import routes from '../../routes';
 
@@ -10,7 +10,6 @@ function LoginPage() {
   const auth = useAuth();
   const [authFailed, setAuthFailed] = useState(false);
   const inputRef = useRef();
-  const location = useLocation();
   const navigate = useNavigate();
   useEffect(() => {
     inputRef.current.focus();
@@ -23,15 +22,11 @@ function LoginPage() {
     },
     onSubmit: async (values) => {
       setAuthFailed(false);
-      console.log(authFailed, 'authFailed');
       try {
         const res = await axios.post(routes.loginPath(), values);
-        console.log(res.data, 'res.data');
         localStorage.setItem('userId', JSON.stringify(res.data));
         auth.logIn();
         auth.userName = res.data.username;
-        console.log(location, 'location');
-        console.log(auth, 'auth в логинПэйдж');
         navigate('/');
       } catch (err) {
         formik.setSubmitting(false);
@@ -84,6 +79,10 @@ function LoginPage() {
             </fieldset>
           </Form>
         </div>
+      </div>
+      <div className="row justify-content-center pt-5">
+        <p>Нет аккаунта?</p>
+        <Link to="/signup">Регистрация</Link>
       </div>
     </div>
   );

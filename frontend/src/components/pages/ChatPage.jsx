@@ -11,7 +11,6 @@ import { actions as messagesActions } from '../../slices/messagesSlice';
 
 const getAuthHeader = () => {
   const userId = JSON.parse(localStorage.getItem('userId'));
-  console.log(userId, 'userId');
   if (userId && userId.token) {
     return { Authorization: `Bearer ${userId.token}` };
   }
@@ -21,8 +20,6 @@ const getAuthHeader = () => {
 function ChatPage() {
   const navigate = useNavigate();
   const auth = useAuth();
-  console.log(auth, 'auth v chate');
-  console.log(localStorage.getItem('userId'));
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -33,7 +30,6 @@ function ChatPage() {
   });
 
   useEffect(() => {
-    console.log('srabotal useEffect v ChatPage');
     const fetchData = async () => {
       try {
         const channelsData = await axios.get(routes.channelsPath(), {
@@ -42,14 +38,10 @@ function ChatPage() {
         const messagesData = await axios.get(routes.messagesPath(), {
           headers: getAuthHeader(),
         });
-        console.log(channelsData, 'chanelsData v chatPage');
-        console.log(messagesData, 'messagesData');
-        console.log(auth, 'проверяю auth');
         dispatch(channelsActions.setChannels(channelsData.data));
         dispatch(messagesActions.setMessages(messagesData.data));
       } catch (err) {
         navigate(routes.loginPagePath());
-        console.log(err);
       }
     };
     fetchData();
