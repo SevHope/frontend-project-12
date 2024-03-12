@@ -1,14 +1,32 @@
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable import/no-extraneous-dependencies */
+import React from 'react';
 import { io } from 'socket.io-client';
+import i18next from 'i18next';
+import { BrowserRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-// import i18next from 'i18next';
+import { I18nextProvider, initReactI18next } from 'react-i18next';
+import AuthProvider from './components/AuthProvider';
+import SocketProvider from './components/SocketProvider';
 import { actions as messagesActions } from './slices/messagesSlice';
 import { actions as channelsActions, defaultChannelId } from './slices/channelsSlice';
-// import resources from './locales/index';
+import resources from './locales/index';
+import App from './App';
 
-export default async () => {
+const init = async () => {
   const socket = io();
   const dispatch = useDispatch();
   const channelIdActive = useSelector((state) => state.channelsReducer.channelId);
+  const defaultLanguage = 'ru';
+  const i18n = i18next.createInstance();
+
+  await i18n.use(initReactI18next).init({
+    resources,
+    lng: defaultLanguage,
+    interpolation: {
+      escapeValue: false,
+    },
+  });
   socket.on('newMessage', (payload) => {
     console.log('srabotal socket newMessage');
     dispatch(messagesActions.addMessage(payload));
@@ -31,4 +49,20 @@ export default async () => {
   socket.on('renameChannel', (payload) => {
     dispatch(channelsActions.renameChannel(payload));
   });
+
+  return (
+    <React.StrictMode>
+      <I18nextProvider i18n={i18n}>
+        <BrowserRouter>
+          <AuthProvider>
+            <SocketProvider socket={socket}>
+              <App />
+            </SocketProvider>
+          </AuthProvider>
+        </BrowserRouter>
+      </I18nextProvider>
+    </React.StrictMode>
+  );
 };
+
+export default init;

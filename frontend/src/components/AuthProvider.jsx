@@ -3,7 +3,7 @@ import React, {
   useState, useMemo, useCallback,
 } from 'react';
 import { useNavigate } from 'react-router-dom';
-import AuthContext from '../contexts/auth';
+import AuthContext from '../contexts/Auth';
 import routes from '../routes';
 
 function AuthProvider({ children }) {

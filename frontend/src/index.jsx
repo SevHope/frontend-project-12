@@ -1,13 +1,13 @@
-import React from 'react';
+// import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { Provider } from 'react-redux';
-import App from './App';
-import store from './slices/index';
+// import { Provider } from 'react-redux';
+// import App from './App';
+import init from './init';
+// import store from './slices/index';
 
-const mountNode = document.getElementById('root');
-const root = ReactDOM.createRoot(mountNode);
-root.render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
-);
+const application = async () => {
+  const chat = ReactDOM.createRoot(document.getElementById('root'));
+  chat.render(await init());
+};
+
+application();

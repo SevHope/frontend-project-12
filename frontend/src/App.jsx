@@ -1,8 +1,8 @@
 /* eslint-disable react/jsx-no-constructed-context-values */
 /* eslint-disable react/prop-types */
 import React, { useState } from 'react';
+import { Provider } from 'react-redux';
 import {
-  BrowserRouter as Router,
   Routes,
   Route,
   Link,
@@ -13,9 +13,9 @@ import { Button, Navbar, Nav } from 'react-bootstrap';
 import LoginPage from './components/pages/LoginPage';
 import ChatPage from './components/pages/ChatPage';
 import RegistrationPage from './components/pages/RegistrationPage';
-import AuthContext from './contexts/auth';
+import AuthContext from './contexts/Auth';
 import useAuth from './hooks/auth';
-import runInit from './init';
+import store from './slices/index';
 
 function AuthProvider({ children }) {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -53,10 +53,9 @@ function AuthButton() {
 }
 
 function App() {
-  runInit();
   return (
-    <AuthProvider>
-      <Router>
+    <Provider store={store}>
+      <AuthProvider>
         <Navbar bg="light" expand="lg">
           <Nav className="mr-auto">
             <Nav.Link as={Link} to="/">Hexlet chat</Nav.Link>
@@ -89,9 +88,8 @@ function App() {
             )}
           />
         </Routes>
-
-      </Router>
-    </AuthProvider>
+      </AuthProvider>
+    </Provider>
   );
 }
 
