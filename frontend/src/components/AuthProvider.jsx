@@ -9,7 +9,6 @@ import routes from '../routes';
 function AuthProvider({ children }) {
   const navigate = useNavigate();
   const getUser = JSON.parse(localStorage.getItem('userId'));
-  console.log(getUser, 'getUser');
   const [token, setToken] = useState(getUser ?? null);
 
   const logIn = useCallback((response) => {

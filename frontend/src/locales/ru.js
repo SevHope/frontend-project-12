@@ -7,9 +7,9 @@ export default {
     },
 
     login: {
-      yourNickname: 'Ваш ник',
+      login: 'Ваш ник',
       password: 'Пароль',
-      loginHeader: 'Войти',
+      loginButton: 'Войти',
       registration: 'Регистрация',
       noAccount: 'Нет аккаунта? ',
       submissionFailed: 'Неверные имя пользователя или пароль',
@@ -18,14 +18,13 @@ export default {
     signup: {
       obligatoryField: 'Обязательное поле',
       numberCharacters: 'От 3 до 20 символов',
-      moreCharacters: 'Не менее 6 символов',
+      minCharacters: 'Не менее 6 символов',
       passwordsMustMatch: 'Пароли должны совпадать',
       userName: 'Имя пользователя',
       password: 'Пароль',
       confirmPassword: 'Подтвердите пароль',
       registration: 'Регистрация',
       alreadyExists: 'Такой пользователь уже существует',
-      badName: 'Недопустимое имя пользователя',
       register: 'Зарегистрироваться',
     },
 
@@ -36,9 +35,7 @@ export default {
         messages_few: ' сообщения',
         messages_many: ' сообщений',
       },
-      messageNew: 'Новое сообщение',
       enterMessage: 'Введите сообщение...',
-      send: 'Отправить',
     },
 
     modals: {
@@ -52,18 +49,13 @@ export default {
       sure: 'Уверены?',
       delete: 'Удалить',
       renameChannel: 'Переименовать канал',
-      channelName: 'Имя канала',
-      text: 'Введите от 3 до 20 символов...',
     },
 
-    notFound: {
+    errorPage: {
       notFound: 'Страница не найдена',
-      redirectTextBegin: 'Но вы можете перейти ',
-      redirectTextEnd: 'на главную страницу',
     },
 
     channels: {
-      channelManagement: 'Управление каналом',
       notFoundChannel: 'Канал не найден',
       delete: 'Удалить',
       rename: 'Переименовать',

@@ -1,7 +1,9 @@
+/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable react/react-in-jsx-scope */
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -10,20 +12,21 @@ import routes from '../../routes';
 
 function RegistrationPage() {
   const auth = useAuth();
+  const { t } = useTranslation();
   const [regFailed, setRegFailed] = useState(false);
   const inputRef = useRef();
   const navigate = useNavigate();
   const validateSchema = yup.object().shape({
     username: yup.string().trim()
-      .min(3, 'От 3 до 20 символов')
-      .max(20, 'От 3 до 20 символов')
-      .required('Обязательное поле'),
+      .min(3, t('signup.numberCharacters'))
+      .max(20, t('signup.numberCharacters'))
+      .required(t('signup.obligatoryField')),
     password: yup.string().trim()
-      .min(6, 'Не менее 6 символов')
-      .required('Обязательное поле'),
+      .min(6, t('signup.minCharacters'))
+      .required(t('signup.obligatoryField')),
     passwordConfirm: yup.string()
-      .required('обязательное поле')
-      .oneOf([yup.ref('password'), null], 'Пароли должны совпадать'),
+      .required(t('signup.obligatoryField'))
+      .oneOf([yup.ref('password'), null], t('signup.passwordsMustMatch')),
   });
   useEffect(() => {
     inputRef.current.focus();
@@ -36,14 +39,11 @@ function RegistrationPage() {
     },
     onSubmit: (values, formikBag) => validateSchema.validate(values)
       .then(() => axios.post(routes.registrationPath(), values))
-      .then((response) => {
-        console.log(response, 'response.data');
-        console.log(values, 'values');
+      .then(() => {
         setRegFailed(false);
         return axios.post(routes.loginPath(), values);
       })
       .then((response) => {
-        console.log(response, 'response');
         localStorage.setItem('userId', JSON.stringify(response.data));
         auth.logIn();
         auth.userName = response.data.username;
@@ -51,15 +51,13 @@ function RegistrationPage() {
       })
       .catch((err) => {
         formikBag.setErrors({ name: err.message });
-        console.log(err.message, 'error.message');
-        console.log(formik.errors, 'formik.errors');
         formik.setSubmitting(false);
         if (err.isAxiosError && err.response.status === 401) {
           setRegFailed(true);
           inputRef.current.select();
         }
         if (err.isAxiosError && err.response.status === 409) {
-          console.log('такой логин уже есть');
+          formikBag.setErrors({ name: t('signup.alreadyExists') });
           setRegFailed(true);
           inputRef.current.select();
         }
@@ -72,12 +70,12 @@ function RegistrationPage() {
         <div className="form-group border">
           <Form className="p-3 bg-light" autoComplete="off" onSubmit={formik.handleSubmit}>
             <fieldset>
-              <legend className="mb-4 text-center fs-4 fw-bold">Регистрация</legend>
+              <legend className="mb-4 text-center fs-4 fw-bold">{t('signup.registration')}</legend>
               <Form.Group>
                 <Form.Control
                   onChange={formik.handleChange}
                   value={formik.values.username}
-                  placeholder="Имя пользователя"
+                  placeholder={t('signup.userName')}
                   name="username"
                   id="username"
                   required
@@ -92,7 +90,7 @@ function RegistrationPage() {
                   value={formik.values.password}
                   className="mt-3"
                   type="password"
-                  placeholder="Пароль"
+                  placeholder={t('signup.password')}
                   name="password"
                   id="password"
                   required
@@ -102,7 +100,7 @@ function RegistrationPage() {
                 <Form.Control
                   onChange={formik.handleChange}
                   className="mt-3"
-                  placeholder="Подтвердите пароль"
+                  placeholder={t('signup.confirmPassword')}
                   value={formik.values.passwordConfirm}
                   type="password"
                   name="passwordConfirm"
@@ -114,7 +112,7 @@ function RegistrationPage() {
                 <div className="error text-danger">{formik.errors.name}</div>
               </Form.Group>
               <div className="text-center mt-5">
-                <Button type="submit" variant="outline-primary">Зарегистрироваться</Button>
+                <Button type="submit" variant="outline-primary">{t('signup.register')}</Button>
               </div>
             </fieldset>
           </Form>

@@ -1,11 +1,14 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import React, { useState, useRef, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Button, Form } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 
 function Messages() {
   const [message, setMessage] = useState('');
   const { token } = JSON.parse(localStorage.getItem('userId'));
+  const { t } = useTranslation();
   const allChannels = useSelector((state) => state.channelsReducer.channels) || [];
   const channelIdActive = useSelector((state) => state.channelsReducer.channelId);
   const allMessages = useSelector((state) => state.messagesReducer.messages) || [];
@@ -32,12 +35,11 @@ function Messages() {
 
   const activeChannelId = (channelItem) => {
     const filter = channelItem.find((channel) => channel.id === channelIdActive);
-    return filter ? filter.name : 'channels not found';
+    return filter ? filter.name : t('channels.notFoundChannel');
   };
 
   const sendMessage = async (e) => {
     e.preventDefault();
-    console.log('zapustilsya sendMessage');
     const currentName = JSON.parse(localStorage.getItem('userId')).username;
     const newMessage = { body: message, channelid: channelIdActive, username: currentName };
     try {
@@ -46,7 +48,6 @@ function Messages() {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log('otpravlau soobwenie');
       setMessage('');
     } catch (error) {
       console.error('Error sending or fetching messages:', error);
@@ -65,6 +66,9 @@ function Messages() {
               {' '}
             </b>
           </p>
+          <span className="text-muted">
+            {`${channelMessages.length} ${t('chat.messagesCounter.messages', { count: (channelMessages.length) })}`}
+          </span>
         </div>
         <div id="messages-box" className="chat-messages overflow-auto px-5 ">
           {messagesBox}
@@ -75,7 +79,7 @@ function Messages() {
               <Form.Control
                 name="body"
                 className="border-0 p-0 ps-2 form-control"
-                placeholder="Введите сообщение..."
+                placeholder={t('chat.enterMessage')}
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 ref={inputRef}

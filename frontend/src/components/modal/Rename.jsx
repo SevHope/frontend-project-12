@@ -1,13 +1,16 @@
+/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable react/prop-types */
 import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { Formik } from 'formik';
+import { useTranslation } from 'react-i18next';
 import { Modal, FormGroup, FormControl } from 'react-bootstrap';
 import * as yup from 'yup';
 import routes from '../../routes';
 
 function Rename({ onHide, item }) {
+  const { t } = useTranslation();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const inputRef = useRef(null);
   const allChannels = useSelector((state) => state.channelsReducer.channels) || [];
@@ -21,10 +24,10 @@ function Rename({ onHide, item }) {
 
   const validationSchema = yup.object().shape({
     name: yup.string().trim()
-      .min(3, 'От 3 до 20 символов')
-      .max(20, 'От 3 до 20 символов')
-      .required('Обязательное поле')
-      .notOneOf(allChannels.map((channel) => channel.name), 'Должно быть уникальным'),
+      .min(3, t('modals.numberCharacters'))
+      .max(20, t('modals.numberCharacters'))
+      .required(t('modals.obligatoryField'))
+      .notOneOf(allChannels.map((channel) => channel.name), t('modals.mustUnique')),
   });
 
   const onSubmit = async (values, formikBag) => {
@@ -45,7 +48,7 @@ function Rename({ onHide, item }) {
   return (
     <Modal show centered>
       <Modal.Header closeButton onHide={onHide}>
-        <Modal.Title>Переименовать канал</Modal.Title>
+        <Modal.Title>{t('modals.renameChannel')}</Modal.Title>
       </Modal.Header>
 
       <Modal.Body>
@@ -72,8 +75,8 @@ function Rename({ onHide, item }) {
                 <div className="error text-danger">{errors.name}</div>
                 )}
               </FormGroup>
-              <input type="submit" disabled={isSubmitting} className="btn btn-primary mt-2" value="Отправить" />
-              <input type="reset" disabled={isSubmitting} className="btn btn-secondary mt-2 ml-2" value="Отменить" onClick={onHide} />
+              <input type="submit" disabled={isSubmitting} className="btn btn-primary mt-2" value={t('modals.send')} />
+              <input type="reset" disabled={isSubmitting} className="btn btn-secondary mt-2 ml-2" value={t('modals.cancel')} onClick={onHide} />
             </form>
           )}
         </Formik>

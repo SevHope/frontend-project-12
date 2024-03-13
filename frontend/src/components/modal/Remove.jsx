@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable jsx-a11y/no-autofocus */
 /* eslint-disable react/prop-types */
 import React, { useState } from 'react';
@@ -6,6 +7,7 @@ import {
 } from 'react-bootstrap';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import routes from '../../routes';
 import { actions as channelsActions } from '../../slices/channelsSlice';
 import { actions as messagesActions } from '../../slices/messagesSlice';
@@ -15,14 +17,13 @@ async function deleteMessages(channelMessages, token) {
     await Promise.all(channelMessages.map(async (message) => {
       await axios.delete([routes.messagesPath(), message.id].join('/'), { headers: { Authorization: `Bearer ${token}` } });
     }));
-
-    console.log('soobwenia udaleny');
   } catch (error) {
     console.log(error, 'error v udalenii soobchenii');
   }
 }
 function Remove({ onHide, item }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const allChannels = useSelector((state) => state.channelsReducer.channels) || [];
   const allMessages = useSelector((state) => state.messagesReducer.messages) || [];
@@ -42,24 +43,21 @@ function Remove({ onHide, item }) {
     const updatedChannels = allChannels.filter((channel) => channel.id !== item);
     const updatedMessages = allMessages.filter((message) => message.channelid !== item);
     dispatch(channelsActions.setChannels(updatedChannels));
-    console.log(allMessages, 'allMessages posle udalenia kanala');
-    console.log(updatedMessages, 'updatedmessages');
     dispatch(messagesActions.setMessages(updatedMessages));
     onHide();
   };
-  console.log(item, 'item v Remove');
   return (
     <Modal show centered>
       <Modal.Header closeButton onHide={onHide}>
-        <Modal.Title>Удалить канал</Modal.Title>
+        <Modal.Title>{t('modals.deleteChannel')}</Modal.Title>
       </Modal.Header>
 
       <Modal.Body>
         <form onSubmit={generateOnSubmit}>
-          <p className="lead">Уверены?</p>
+          <p className="lead">{t('modals.sure')}</p>
           <FormGroup>
-            <input type="reset" disabled={isSubmitting} className="btn btn-secondary mt-2" value="Отменить" onClick={onHide} />
-            <input type="submit" disabled={isSubmitting} className="btn btn-danger mt-2 ml-2" value="Удалить" />
+            <input type="reset" disabled={isSubmitting} className="btn btn-secondary mt-2" value={t('modals.cancel')} onClick={onHide} />
+            <input type="submit" disabled={isSubmitting} className="btn btn-danger mt-2 ml-2" value={t('modals.delete')} />
           </FormGroup>
         </form>
       </Modal.Body>

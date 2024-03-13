@@ -1,9 +1,10 @@
-/* eslint-disable */
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable import/no-extraneous-dependencies */
+import { useTranslation } from 'react-i18next';
 
-export const ErrorPage = () => {
-    return (
-      <>
-        <div>Error404</div>
-      </>
-    );
-  };
+export default function ErrorPage() {
+  const { t } = useTranslation();
+  return (
+    <div>{t('errorPage.notFound')}</div>
+  );
+}

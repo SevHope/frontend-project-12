@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/control-has-associated-label */
@@ -6,6 +7,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Dropdown from 'react-bootstrap/Dropdown';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import { useTranslation } from 'react-i18next';
 import { actions as channelsActions } from '../slices/channelsSlice';
 import getModal from './modal/index';
 
@@ -28,6 +30,7 @@ const renderModal = ({
 
 function Channels() {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const channels = useSelector((state) => state.channelsReducer) || [];
   const channelIdActive = useSelector((state) => state.channelsReducer.channelId);
   const [modalInfo, setModalInfo] = useState({ type: null, item: null });
@@ -41,7 +44,7 @@ function Channels() {
   return (
     <div className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
       <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
-        <b>Каналы</b>
+        <b>{t('channels.channels')}</b>
         <button
           type="button"
           className="p-0 text-primary btn btn-group-vertical"
@@ -98,9 +101,9 @@ function Channels() {
                   <Dropdown.Toggle split variant="bg-light" id={channel.id} />
                   <Dropdown.Menu>
                     <Dropdown.Item id={channel.id} onClick={(e) => showModal('removing', e.target.id)}>
-                      Удалить
+                      {t('channels.delete')}
                     </Dropdown.Item>
-                    <Dropdown.Item id={channel.id} onClick={(e) => showModal('renaming', e.target.id)}>Переименовать</Dropdown.Item>
+                    <Dropdown.Item id={channel.id} onClick={(e) => showModal('renaming', e.target.id)}>{t('channels.rename')}</Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
               </div>

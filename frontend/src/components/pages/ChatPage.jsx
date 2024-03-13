@@ -24,7 +24,6 @@ function ChatPage() {
 
   useEffect(() => {
     if (!localStorage.getItem('userId')) {
-      console.log('localstorage');
       navigate(routes.loginPagePath());
     }
   });

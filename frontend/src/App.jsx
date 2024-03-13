@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable react/jsx-no-constructed-context-values */
 /* eslint-disable react/prop-types */
 import React, { useState } from 'react';
@@ -10,12 +11,14 @@ import {
   useLocation,
 } from 'react-router-dom';
 import { Button, Navbar, Nav } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 import LoginPage from './components/pages/LoginPage';
 import ChatPage from './components/pages/ChatPage';
 import RegistrationPage from './components/pages/RegistrationPage';
 import AuthContext from './contexts/Auth';
 import useAuth from './hooks/auth';
 import store from './slices/index';
+import ErrorPage from './components/pages/ErrorPage';
 
 function AuthProvider({ children }) {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -44,21 +47,23 @@ function PrivateRoute({ children }) {
 function AuthButton() {
   const auth = useAuth();
   const location = useLocation();
+  const { t } = useTranslation();
 
   return (
     auth.loggedIn
-      ? <Button onClick={auth.logOut} as={Link} to="/login" state={{ from: location }}>Выйти</Button>
+      ? <Button onClick={auth.logOut} as={Link} to="/login" state={{ from: location }}>{t('header.goOut')}</Button>
       : null
   );
 }
 
 function App() {
+  const { t } = useTranslation();
   return (
     <Provider store={store}>
       <AuthProvider>
         <Navbar bg="light" expand="lg">
           <Nav className="mr-auto">
-            <Nav.Link as={Link} to="/">Hexlet chat</Nav.Link>
+            <Nav.Link as={Link} to="/">{t('header.mainHeader')}</Nav.Link>
           </Nav>
           <AuthButton />
         </Navbar>
@@ -87,6 +92,7 @@ function App() {
               <RegistrationPage />
             )}
           />
+          <Route path="*" element={<ErrorPage />} />
         </Routes>
       </AuthProvider>
     </Provider>

@@ -22,10 +22,17 @@ const channelsSlice = createSlice({
       state.channelId = payload.id;
     },
     addChannel(state, { payload }) {
+      const { username } = JSON.parse(localStorage.getItem('userId'));
+      if (payload.author === username) {
+        state.channelId = payload.id;
+      }
       state.channels.push(payload);
     },
     removeChannel(state, { payload }) {
       const updateChannels = state.channels.filter((channel) => channel.id !== payload.id);
+      if (state.channelId === payload.id) {
+        state.channelId = defaultChannelId;
+      }
       state.channels = updateChannels;
     },
     renameChannel(state, { payload }) {

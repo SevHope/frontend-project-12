@@ -4,9 +4,7 @@ import React from 'react';
 import { io } from 'socket.io-client';
 import i18next from 'i18next';
 import { BrowserRouter } from 'react-router-dom';
-// import { useSelector } from 'react-redux';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
-// import SocketProvider from './components/SocketProvider';
 import { actions as messagesActions } from './slices/messagesSlice';
 import { actions as channelsActions } from './slices/channelsSlice';
 import resources from './locales/index';
@@ -15,7 +13,6 @@ import slices from './slices';
 
 const init = async () => {
   const socket = io();
-  // const channelIdActive = useSelector((state) => state.channelsReducer.channelId);
   const defaultLanguage = 'ru';
   const i18n = i18next.createInstance();
 
@@ -27,16 +24,9 @@ const init = async () => {
     },
   });
   socket.on('newMessage', (payload) => {
-    console.log('srabotal socket newMessage');
     slices.dispatch(messagesActions.addMessage(payload));
   });
   socket.on('newChannel', (payload) => {
-    console.log('srabotal socket newChannel');
-    console.log(payload, 'payload v soket');
-    const { username } = JSON.parse(localStorage.getItem('userId'));
-    if (payload.author === username) {
-      slices.dispatch(channelsActions.setChannelId(payload.id));
-    }
     slices.dispatch(channelsActions.addChannel(payload));
   });
   socket.on('removeChannel', (payload) => {

@@ -1,13 +1,16 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import { useFormik } from 'formik';
 import { Button, Form } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 import { useNavigate, Link } from 'react-router-dom';
 import useAuth from '../../hooks/auth';
 import routes from '../../routes';
 
 function LoginPage() {
   const auth = useAuth();
+  const { t } = useTranslation();
   const [authFailed, setAuthFailed] = useState(false);
   const inputRef = useRef();
   const navigate = useNavigate();
@@ -47,11 +50,11 @@ function LoginPage() {
           <Form onSubmit={formik.handleSubmit} className="p-3">
             <fieldset>
               <Form.Group>
-                <Form.Label htmlFor="username">Username</Form.Label>
+                <Form.Label htmlFor="username" />
                 <Form.Control
                   onChange={formik.handleChange}
                   value={formik.values.username}
-                  placeholder="username"
+                  placeholder={t('login.login')}
                   name="username"
                   id="username"
                   autoComplete="username"
@@ -61,28 +64,28 @@ function LoginPage() {
                 />
               </Form.Group>
               <Form.Group>
-                <Form.Label htmlFor="password">Password</Form.Label>
+                <Form.Label htmlFor="password" />
                 <Form.Control
                   type="password"
                   onChange={formik.handleChange}
                   value={formik.values.password}
-                  placeholder="password"
+                  placeholder={t('login.password')}
                   name="password"
                   id="password"
                   autoComplete="current-password"
                   isInvalid={authFailed}
                   required
                 />
-                <Form.Control.Feedback type="invalid">the username or password is incorrect</Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">{t('login.submissionFailed')}</Form.Control.Feedback>
               </Form.Group>
-              <Button type="submit" variant="outline-primary">Submit</Button>
+              <Button type="submit" variant="outline-primary">{t('login.loginButton')}</Button>
             </fieldset>
           </Form>
         </div>
       </div>
       <div className="row justify-content-center pt-5">
-        <p>Нет аккаунта?</p>
-        <Link to="/signup">Регистрация</Link>
+        <p>{t('login.noAccount')}</p>
+        <Link to="/signup">{t('login.registration')}</Link>
       </div>
     </div>
   );

@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable react/prop-types */
 import React, {
   useEffect, useRef, useState,
@@ -8,19 +9,21 @@ import {
 } from 'react-bootstrap';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import routes from '../../routes';
 
 function Add({ onHide }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { t } = useTranslation();
   const allChannels = useSelector((state) => state.channelsReducer.channels) || [];
   const { username, token } = JSON.parse(localStorage.getItem('userId'));
   const validateSchema = yup.object().shape({
     name: yup.string().trim()
-      .min(3, 'От 3 до 20 символов')
-      .max(20, 'От 3 до 20 символов')
-      .required('Обязательное поле')
-      .notOneOf(allChannels.map((item) => item.name), 'Должно быть уникальным'),
+      .min(3, t('modals.numberCharacters'))
+      .max(20, t('modals.numberCharacters'))
+      .required(t('modals.obligatoryField'))
+      .notOneOf(allChannels.map((item) => item.name), t('modals.mustUnique')),
   });
   const generateOnSubmit = () => async (values, formikBag) => {
     setIsSubmitting(true);
@@ -50,7 +53,7 @@ function Add({ onHide }) {
   return (
     <Modal centered show>
       <Modal.Header closeButton onHide={onHide}>
-        <Modal.Title>Добавить канал</Modal.Title>
+        <Modal.Title>{t('modals.addChannel')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <form onSubmit={formik.handleSubmit}>
@@ -67,8 +70,8 @@ function Add({ onHide }) {
             <div className="error text-danger">{formik.errors.name}</div>
             )}
           </FormGroup>
-          <input type="submit" disabled={isSubmitting} className="btn btn-primary mt-2" value="Отправить" />
-          <input type="reset" disabled={isSubmitting} className="btn btn-secondary mt-2 ml-2" value="Отменить" onClick={onHide} />
+          <input type="submit" disabled={isSubmitting} className="btn btn-primary mt-2" value={t('modals.send')} />
+          <input type="reset" disabled={isSubmitting} className="btn btn-secondary mt-2 ml-2" value={t('modals.cancel')} onClick={onHide} />
         </form>
       </Modal.Body>
     </Modal>
