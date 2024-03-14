@@ -5,6 +5,8 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { Formik } from 'formik';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { Modal, FormGroup, FormControl } from 'react-bootstrap';
 import * as yup from 'yup';
 import routes from '../../routes';
@@ -12,6 +14,7 @@ import routes from '../../routes';
 function Rename({ onHide, item }) {
   const { t } = useTranslation();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const notify = () => toast.success(t('channels.channelRenamed'));
   const inputRef = useRef(null);
   const allChannels = useSelector((state) => state.channelsReducer.channels) || [];
   const { token } = JSON.parse(localStorage.getItem('userId'));
@@ -37,6 +40,7 @@ function Rename({ onHide, item }) {
       await validationSchema.validate(values, { abortEarly: false });
       await axios.patch(path, values, { headers: { Authorization: `Bearer ${token}` } });
       onHide();
+      notify();
       formikBag.resetForm();
     } catch (error) {
       formikBag.setErrors({ name: error.message });

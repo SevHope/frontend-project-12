@@ -10,6 +10,8 @@ import {
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import * as yup from 'yup';
 import routes from '../../routes';
 
@@ -18,6 +20,7 @@ function Add({ onHide }) {
   const { t } = useTranslation();
   const allChannels = useSelector((state) => state.channelsReducer.channels) || [];
   const { username, token } = JSON.parse(localStorage.getItem('userId'));
+  const notify = () => toast.success(t('channels.channelCreated'));
   const validateSchema = yup.object().shape({
     name: yup.string().trim()
       .min(3, t('modals.numberCharacters'))
@@ -31,6 +34,7 @@ function Add({ onHide }) {
     try {
       await validateSchema.validate(values, { abortEarly: false });
       await axios.post(routes.channelsPath(), newChannel, { headers: { Authorization: `Bearer ${token}` } });
+      notify();
       onHide();
       formikBag.resetForm();
     } catch (error) {

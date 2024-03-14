@@ -3,6 +3,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 
 function Messages() {
@@ -12,6 +14,8 @@ function Messages() {
   const allChannels = useSelector((state) => state.channelsReducer.channels) || [];
   const channelIdActive = useSelector((state) => state.channelsReducer.channelId);
   const allMessages = useSelector((state) => state.messagesReducer.messages) || [];
+  const noNetworkError = () => toast.error(t('error.networkError'));
+  const dataLoadingError = () => toast.error(t('error.dataLoadingError'));
 
   const inputRef = useRef();
   useEffect(() => {
@@ -50,6 +54,12 @@ function Messages() {
       });
       setMessage('');
     } catch (error) {
+      if (error.message === 'Network Error') {
+        noNetworkError();
+      }
+      if (error.status === 500) {
+        dataLoadingError();
+      }
       console.error('Error sending or fetching messages:', error);
     }
   };

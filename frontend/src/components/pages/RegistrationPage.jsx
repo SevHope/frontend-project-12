@@ -4,6 +4,8 @@ import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -13,6 +15,8 @@ import routes from '../../routes';
 function RegistrationPage() {
   const auth = useAuth();
   const { t } = useTranslation();
+  const noNetworkError = () => toast.error(t('error.networkError'));
+  const dataLoadingError = () => toast.error(t('error.dataLoadingError'));
   const [regFailed, setRegFailed] = useState(false);
   const inputRef = useRef();
   const navigate = useNavigate();
@@ -52,6 +56,12 @@ function RegistrationPage() {
       .catch((err) => {
         formikBag.setErrors({ name: err.message });
         formik.setSubmitting(false);
+        if (err.message === 'Network Error') {
+          noNetworkError();
+        }
+        if (err.status === 500) {
+          dataLoadingError();
+        }
         if (err.isAxiosError && err.response.status === 401) {
           setRegFailed(true);
           inputRef.current.select();
@@ -67,7 +77,7 @@ function RegistrationPage() {
   return (
     <div className="container-fluid">
       <div className="row justify-content-center pt-5">
-        <div className="form-group border">
+        <div className="form-group border col-4">
           <Form className="p-3 bg-light" autoComplete="off" onSubmit={formik.handleSubmit}>
             <fieldset>
               <legend className="mb-4 text-center fs-4 fw-bold">{t('signup.registration')}</legend>

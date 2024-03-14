@@ -4,6 +4,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useFormik } from 'formik';
 import { Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate, Link } from 'react-router-dom';
 import useAuth from '../../hooks/auth';
 import routes from '../../routes';
@@ -14,6 +16,8 @@ function LoginPage() {
   const [authFailed, setAuthFailed] = useState(false);
   const inputRef = useRef();
   const navigate = useNavigate();
+  const noNetworkError = () => toast.error(t('error.networkError'));
+  const dataLoadingError = () => toast.error(t('error.dataLoadingError'));
   useEffect(() => {
     inputRef.current.focus();
   }, []);
@@ -33,6 +37,12 @@ function LoginPage() {
         navigate('/');
       } catch (err) {
         formik.setSubmitting(false);
+        if (err.message === 'Network Error') {
+          noNetworkError();
+        }
+        if (err.status === 500) {
+          dataLoadingError();
+        }
         if (err.isAxiosError && err.response.status === 401) {
           setAuthFailed(true);
           inputRef.current.select();
@@ -78,14 +88,18 @@ function LoginPage() {
                 />
                 <Form.Control.Feedback type="invalid">{t('login.submissionFailed')}</Form.Control.Feedback>
               </Form.Group>
-              <Button type="submit" variant="outline-primary">{t('login.loginButton')}</Button>
+              <div className="d-grid d-flex justify-content-md-center">
+                <Button type="submit" className="mt-3" variant="outline-primary">{t('login.loginButton')}</Button>
+              </div>
             </fieldset>
           </Form>
         </div>
       </div>
-      <div className="row justify-content-center pt-5">
-        <p>{t('login.noAccount')}</p>
-        <Link to="/signup">{t('login.registration')}</Link>
+      <div className="text-center mt-2">
+        <div className="card-footer p-4">
+          <span>{t('login.noAccount')}</span>
+          <Link to="/signup">{t('login.registration')}</Link>
+        </div>
       </div>
     </div>
   );

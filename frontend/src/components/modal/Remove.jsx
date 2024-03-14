@@ -8,6 +8,8 @@ import {
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import routes from '../../routes';
 import { actions as channelsActions } from '../../slices/channelsSlice';
 import { actions as messagesActions } from '../../slices/messagesSlice';
@@ -25,6 +27,7 @@ function Remove({ onHide, item }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const notify = () => toast.success(t('channels.channelDeleted'));
   const allChannels = useSelector((state) => state.channelsReducer.channels) || [];
   const allMessages = useSelector((state) => state.messagesReducer.messages) || [];
   const channelMessages = allMessages.filter((message) => message.channelid === item);
@@ -45,6 +48,7 @@ function Remove({ onHide, item }) {
     dispatch(channelsActions.setChannels(updatedChannels));
     dispatch(messagesActions.setMessages(updatedMessages));
     onHide();
+    notify();
   };
   return (
     <Modal show centered>

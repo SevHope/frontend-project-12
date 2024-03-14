@@ -12,6 +12,7 @@ import {
 } from 'react-router-dom';
 import { Button, Navbar, Nav } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import { ToastContainer } from 'react-toastify';
 import LoginPage from './components/pages/LoginPage';
 import ChatPage from './components/pages/ChatPage';
 import RegistrationPage from './components/pages/RegistrationPage';
@@ -95,6 +96,7 @@ function App() {
           <Route path="*" element={<ErrorPage />} />
         </Routes>
       </AuthProvider>
+      <ToastContainer />
     </Provider>
   );
 }
