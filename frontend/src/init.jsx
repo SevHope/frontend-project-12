@@ -5,6 +5,7 @@ import { io } from 'socket.io-client';
 import i18next from 'i18next';
 import { BrowserRouter } from 'react-router-dom';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
+import filterWords from 'leo-profanity';
 import { actions as messagesActions } from './slices/messagesSlice';
 import { actions as channelsActions } from './slices/channelsSlice';
 import resources from './locales/index';
@@ -14,6 +15,8 @@ import slices from './slices';
 const init = async () => {
   const socket = io();
   const defaultLanguage = 'ru';
+  filterWords.add(filterWords.getDictionary('ru'));
+  filterWords.add(filterWords.getDictionary('en'));
   const i18n = i18next.createInstance();
 
   await i18n.use(initReactI18next).init({

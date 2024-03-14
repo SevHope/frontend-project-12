@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import filterWords from 'leo-profanity';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
@@ -30,16 +31,14 @@ function Messages() {
     return (
       <div className={`text-break mb-2 ${messageClasses}`} key={id}>
         <b>{username}</b>
-        :
-        {' '}
-        {body}
+        {`: ${filterWords.clean(body)}`}
       </div>
     );
   });
 
   const activeChannelId = (channelItem) => {
     const filter = channelItem.find((channel) => channel.id === channelIdActive);
-    return filter ? filter.name : t('channels.notFoundChannel');
+    return filter ? filterWords.clean(filter.name) : t('channels.notFoundChannel');
   };
 
   const sendMessage = async (e) => {

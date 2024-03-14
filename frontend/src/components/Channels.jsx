@@ -7,6 +7,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Dropdown from 'react-bootstrap/Dropdown';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import filterWords from 'leo-profanity';
 import { useTranslation } from 'react-i18next';
 import { actions as channelsActions } from '../slices/channelsSlice';
 import getModal from './modal/index';
@@ -76,7 +77,7 @@ function Channels() {
                 >
                   # 
                   {' '}
-                  {channel.name.length > 10 ? `${channel.name.substring(0, 10)}...` : channel.name}
+                  {channel.name.length > 10 ? `${channel.name.substring(0, 10)}...` : filterWords.clean(channel.name)}
                 </button>
               </div>
             )}
@@ -91,7 +92,7 @@ function Channels() {
                 >
                   # 
                   {' '}
-                  { channel.name }
+                  { filterWords.clean(channel.name) }
                 </button>
               </div>
             )}
