@@ -44,7 +44,11 @@ function Messages() {
   const sendMessage = async (e) => {
     e.preventDefault();
     const currentName = JSON.parse(localStorage.getItem('userId')).username;
-    const newMessage = { body: message, channelid: channelIdActive, username: currentName };
+    const newMessage = {
+      body: filterWords.clean(message),
+      channelid: channelIdActive,
+      username: currentName,
+    };
     try {
       await axios.post('/api/v1/messages', newMessage, {
         headers: {
