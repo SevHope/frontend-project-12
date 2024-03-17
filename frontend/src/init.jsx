@@ -1,4 +1,3 @@
-/* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable import/no-extraneous-dependencies */
 import React from 'react';
 import { Provider, ErrorBoundary } from '@rollbar/react';
@@ -7,6 +6,7 @@ import i18next from 'i18next';
 import { BrowserRouter } from 'react-router-dom';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
 import filterWords from 'leo-profanity';
+import AuthProvider from './components/AuthProvider';
 import { actions as messagesActions } from './slices/messagesSlice';
 import { actions as channelsActions } from './slices/channelsSlice';
 import resources from './locales/index';
@@ -50,7 +50,9 @@ const init = async () => {
         <React.StrictMode>
           <I18nextProvider i18n={i18n}>
             <BrowserRouter>
-              <App />
+              <AuthProvider>
+                <App />
+              </AuthProvider>
             </BrowserRouter>
           </I18nextProvider>
         </React.StrictMode>

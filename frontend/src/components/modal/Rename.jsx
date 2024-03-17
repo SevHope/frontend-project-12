@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable react/prop-types */
 import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
@@ -7,7 +6,9 @@ import { Formik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Modal, FormGroup, FormControl } from 'react-bootstrap';
+import {
+  Modal, FormGroup, FormControl, FormLabel,
+} from 'react-bootstrap';
 import * as yup from 'yup';
 import routes from '../../routes';
 
@@ -23,7 +24,7 @@ function Rename({ onHide, item }) {
     inputRef.current.focus();
   }, []);
 
-  const initialValues = { name: '' };
+  const initialValues = { name: item.name };
 
   const validationSchema = yup.object().shape({
     name: yup.string().trim()
@@ -35,7 +36,7 @@ function Rename({ onHide, item }) {
 
   const onSubmit = async (values, formikBag) => {
     setIsSubmitting(true);
-    const path = [routes.channelsPath(), item].join('/');
+    const path = [routes.channelsPath(), item.id].join('/');
     try {
       await validationSchema.validate(values, { abortEarly: false });
       await axios.patch(path, values, { headers: { Authorization: `Bearer ${token}` } });
@@ -66,6 +67,7 @@ function Rename({ onHide, item }) {
           }) => (
             <form onSubmit={handleSubmit}>
               <FormGroup>
+                <FormLabel htmlFor="name" />
                 <FormControl
                   required
                   ref={inputRef}
@@ -79,8 +81,8 @@ function Rename({ onHide, item }) {
                 <div className="error text-danger">{errors.name}</div>
                 )}
               </FormGroup>
-              <input type="submit" disabled={isSubmitting} className="btn btn-primary mt-2" value={t('modals.send')} />
-              <input type="reset" disabled={isSubmitting} className="btn btn-secondary mt-2 ml-2" value={t('modals.cancel')} onClick={onHide} />
+              <button type="submit" disabled={isSubmitting} className="btn btn-primary mt-2">{t('modals.send')}</button>
+              <button type="button" disabled={isSubmitting} className="btn btn-secondary mt-2 ml-2" onClick={onHide}>{t('modals.cancel')}</button>
             </form>
           )}
         </Formik>

@@ -3,32 +3,31 @@ import React, {
   useState, useMemo, useCallback,
 } from 'react';
 import { useNavigate } from 'react-router-dom';
-import AuthContext from '../contexts/Auth';
+import AuthContext from '../contexts/auth';
 import routes from '../routes';
 
 function AuthProvider({ children }) {
   const navigate = useNavigate();
-  const getUser = JSON.parse(localStorage.getItem('userId'));
-  const [token, setToken] = useState(getUser ?? null);
+  const [loggedIn, setLoggedIn] = useState(false);
 
   const logIn = useCallback((response) => {
     const data = JSON.stringify(response.data);
     localStorage.setItem('userInfo', data);
-    setToken(data);
+    setLoggedIn(true);
     navigate(routes.chatPagePath());
   }, [navigate]);
 
   const logOut = useCallback(() => {
     localStorage.removeItem('userInfo');
+    setLoggedIn(false);
     navigate(routes.loginPagePath());
   }, [navigate]);
 
   const context = useMemo(() => ({
-    token,
-    setToken,
     logOut,
     logIn,
-  }), [token, setToken, logOut, logIn]);
+    loggedIn,
+  }), [logOut, logIn, loggedIn]);
 
   return (
     <AuthContext.Provider value={context}>

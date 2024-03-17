@@ -7,6 +7,6 @@ export default {
   messagesPath: () => [apiPath, 'messages'].join('/'),
   registrationPath: () => [apiPath, 'signup'].join('/'),
   loginPagePath: () => '/login',
-  chatPagepath: () => '/chat',
+  chatPagePath: () => '/chat',
   registrationPagePath: () => '/signup',
 };

@@ -1,11 +1,10 @@
-/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable react/prop-types */
 import React, {
   useEffect, useRef, useState,
 } from 'react';
 import { useFormik } from 'formik';
 import {
-  Modal, FormGroup, FormControl,
+  Modal, FormGroup, FormControl, FormLabel,
 } from 'react-bootstrap';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
@@ -62,6 +61,7 @@ function Add({ onHide }) {
       <Modal.Body>
         <form onSubmit={formik.handleSubmit}>
           <FormGroup>
+            <FormLabel htmlFor="name" />
             <FormControl
               required
               ref={inputRef}
@@ -74,8 +74,8 @@ function Add({ onHide }) {
             <div className="error text-danger">{formik.errors.name}</div>
             )}
           </FormGroup>
-          <input type="submit" disabled={isSubmitting} className="btn btn-primary mt-2" value={t('modals.send')} />
-          <input type="reset" disabled={isSubmitting} className="btn btn-secondary mt-2 ml-2" value={t('modals.cancel')} onClick={onHide} />
+          <button type="submit" disabled={isSubmitting} className="btn btn-primary mt-2">{t('modals.send')}</button>
+          <button type="button" disabled={isSubmitting} className="btn btn-secondary mt-2 ml-2" onClick={onHide}>{t('modals.cancel')}</button>
         </form>
       </Modal.Body>
     </Modal>

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { useImmer } from 'use-immer';
 import getModal from './index';
 

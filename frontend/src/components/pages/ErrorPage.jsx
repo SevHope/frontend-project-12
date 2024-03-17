@@ -1,5 +1,4 @@
-/* eslint-disable react/react-in-jsx-scope */
-/* eslint-disable import/no-extraneous-dependencies */
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 export default function ErrorPage() {

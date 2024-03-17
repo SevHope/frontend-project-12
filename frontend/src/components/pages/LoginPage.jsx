@@ -6,7 +6,7 @@ import { Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import useAuth from '../../hooks/auth';
 import routes from '../../routes';
 
@@ -15,7 +15,6 @@ function LoginPage() {
   const { t } = useTranslation();
   const [authFailed, setAuthFailed] = useState(false);
   const inputRef = useRef();
-  const navigate = useNavigate();
   const noNetworkError = () => toast.error(t('error.networkError'));
   const dataLoadingError = () => toast.error(t('error.dataLoadingError'));
   useEffect(() => {
@@ -31,10 +30,8 @@ function LoginPage() {
       setAuthFailed(false);
       try {
         const res = await axios.post(routes.loginPath(), values);
-        localStorage.setItem('userId', JSON.stringify(res.data));
-        auth.logIn();
         auth.userName = res.data.username;
-        navigate('/');
+        auth.logIn(res);
       } catch (err) {
         formik.setSubmitting(false);
         if (err.message === 'Network Error') {
