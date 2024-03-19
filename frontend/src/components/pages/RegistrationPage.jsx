@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
-import { useFormik } from 'formik';
+import { Formik } from 'formik';
 import * as yup from 'yup';
 import useAuth from '../../hooks/auth';
 import routes from '../../routes';
@@ -19,6 +19,7 @@ function RegistrationPage() {
   const [regFailed, setRegFailed] = useState(false);
   const inputRef = useRef();
   const navigate = useNavigate();
+
   const validateSchema = yup.object().shape({
     username: yup.string().trim()
       .min(3, t('signup.numberCharacters'))
@@ -31,100 +32,121 @@ function RegistrationPage() {
       .required(t('signup.obligatoryField'))
       .oneOf([yup.ref('password'), null], t('signup.passwordsMustMatch')),
   });
+
   useEffect(() => {
     inputRef.current.focus();
   }, []);
-  const formik = useFormik({
-    initialValues: {
-      username: '',
-      password: '',
-      passwordConfirm: '',
-    },
-    onSubmit: (values, formikBag) => validateSchema.validate(values)
-      .then(() => axios.post(routes.registrationPath(), values))
-      .then(() => {
-        setRegFailed(false);
-        return axios.post(routes.loginPath(), values);
-      })
-      .then((response) => {
-        localStorage.setItem('userId', JSON.stringify(response.data));
-        auth.logIn();
-        auth.userName = response.data.username;
-        navigate('/');
-      })
-      .catch((err) => {
-        formikBag.setErrors({ name: err.message });
-        formik.setSubmitting(false);
-        if (err.message === 'Network Error') {
-          noNetworkError();
-        }
-        if (err.status === 500) {
-          dataLoadingError();
-        }
-        if (err.isAxiosError && err.response.status === 401) {
-          setRegFailed(true);
-          inputRef.current.select();
-        }
-        if (err.isAxiosError && err.response.status === 409) {
-          formikBag.setErrors({ name: t('signup.alreadyExists') });
-          setRegFailed(true);
-          inputRef.current.select();
-        }
-        throw err;
-      }),
-  });
+
+  const initialValues = {
+    username: '',
+    password: '',
+    passwordConfirm: '',
+  };
+
+  const onSubmit = async (values, formikBag) => {
+    try {
+      await validateSchema.validate(values);
+      await axios.post(routes.registrationPath(), values);
+      setRegFailed(false);
+      const response = await axios.post(routes.loginPath(), values);
+      localStorage.setItem('userId', JSON.stringify(response.data));
+      auth.login();
+      auth.username = response.data.username;
+      navigate('/');
+    } catch (err) {
+      formikBag.setErrors({ name: err.message });
+      formikBag.setSubmitting(false);
+      if (err.message === 'network error') {
+        noNetworkError();
+      }
+      if (err.response.status === 500) {
+        dataLoadingError();
+      }
+      if (err.isaxioserror && err.response.status === 401) {
+        setRegFailed(true);
+        inputRef.current.select();
+      }
+      if (err.isaxioserror && err.response.status === 409) {
+        formikBag.seterrors({ name: t('signup.alreadyexists') });
+        setRegFailed(true);
+        inputRef.current.select();
+      }
+      throw err;
+    }
+  };
+
   return (
     <div className="container-fluid">
       <div className="row justify-content-center pt-5">
         <div className="form-group border col-4">
-          <Form className="p-3 bg-light" autoComplete="off" onSubmit={formik.handleSubmit}>
-            <fieldset>
-              <legend className="mb-4 text-center fs-4 fw-bold">{t('signup.registration')}</legend>
-              <Form.Group>
-                <Form.Control
-                  onChange={formik.handleChange}
-                  value={formik.values.username}
-                  placeholder={t('signup.userName')}
-                  name="username"
-                  id="username"
-                  required
-                  autoComplete="new-password"
-                  ref={inputRef}
-                  isInvalid={regFailed}
-                />
-              </Form.Group>
-              <Form.Group>
-                <Form.Control
-                  onChange={formik.handleChange}
-                  value={formik.values.password}
-                  className="mt-3"
-                  type="password"
-                  placeholder={t('signup.password')}
-                  name="password"
-                  id="password"
-                  required
-                  autoComplete="new-password"
-                  isInvalid={regFailed}
-                />
-                <Form.Control
-                  onChange={formik.handleChange}
-                  className="mt-3"
-                  placeholder={t('signup.confirmPassword')}
-                  value={formik.values.passwordConfirm}
-                  type="password"
-                  name="passwordConfirm"
-                  id="passwordConfirm"
-                  required
-                  autoComplete="new-passwordConfirm"
-                  isInvalid={regFailed}
-                />
-                <div className="error text-danger">{formik.errors.name}</div>
-              </Form.Group>
-              <div className="text-center mt-5">
-                <Button type="submit" variant="outline-primary">{t('signup.register')}</Button>
-              </div>
-            </fieldset>
-          </Form>
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validateSchema}
+            onSubmit={onSubmit}
+            validateOnChange
+          >
+            {({
+              values, errors, touched, handleChange, handleBlur, handleSubmit,
+            }) => (
+              <Form className="p-3 bg-light" autoComplete="off" onSubmit={handleSubmit}>
+                <fieldset>
+                  <legend className="mb-4 text-center fs-4 fw-bold">{t('signup.registration')}</legend>
+                  <Form.Group>
+                    <Form.Control
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.username}
+                      placeholder={t('signup.userName')}
+                      name="username"
+                      id="username"
+                      required
+                      autoComplete="new-password"
+                      ref={inputRef}
+                      isInvalid={regFailed}
+                    />
+                    {touched.username && errors.username && (
+                    <div className="error text-danger">{errors.username}</div>
+                    )}
+                  </Form.Group>
+                  <Form.Group>
+                    <Form.Control
+                      onChange={handleChange}
+                      value={values.password}
+                      className="mt-3"
+                      type="password"
+                      placeholder={t('signup.password')}
+                      name="password"
+                      id="password"
+                      required
+                      autoComplete="new-password"
+                      isInvalid={regFailed}
+                    />
+                    {touched.password && errors.password && (
+                    <div className="error text-danger">{errors.password}</div>
+                    )}
+                    <Form.Control
+                      onChange={handleChange}
+                      className="mt-3"
+                      placeholder={t('signup.confirmPassword')}
+                      value={values.passwordConfirm}
+                      type="password"
+                      name="passwordConfirm"
+                      id="passwordConfirm"
+                      required
+                      autoComplete="new-passwordConfirm"
+                      isInvalid={regFailed}
+                    />
+                    {touched.passwordConfirm && errors.passwordConfirm && (
+                    <div className="error text-danger">{errors.passwordConfirm}</div>
+                    )}
+                  </Form.Group>
+                  <div className="text-center mt-5">
+                    <Button type="submit" variant="outline-primary">{t('signup.register')}</Button>
+                  </div>
+                </fieldset>
+              </Form>
+            )}
+          </Formik>
         </div>
       </div>
     </div>
