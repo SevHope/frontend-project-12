@@ -32,7 +32,7 @@ function Messages() {
     return (
       <div className={`text-break mb-2 ${messageClasses}`} key={id}>
         <b>{username}</b>
-        <span>:</span>
+        <span>: </span>
         {filterWords.clean(body)}
       </div>
     );
@@ -50,7 +50,7 @@ function Messages() {
 
   const sendMessage = async (e) => {
     e.preventDefault();
-    const currentName = JSON.parse(localStorage.getItem('userId')).username;
+    const currentName = JSON.parse(localStorage.getItem('userInfo')).username;
     const newMessage = {
       body: filterWords.clean(message),
       channelid: channelIdActive,
