@@ -17,6 +17,7 @@ function Messages() {
   const allMessages = useSelector((state) => state.messagesReducer.messages) || [];
   const noNetworkError = () => toast.error(t('error.networkError'));
   const dataLoadingError = () => toast.error(t('error.dataLoadingError'));
+  const messagesBoxRef = useRef();
 
   const inputRef = useRef();
   useEffect(() => {
@@ -35,6 +36,11 @@ function Messages() {
       </div>
     );
   });
+  useEffect(() => {
+    if (messagesBoxRef.current) {
+      messagesBoxRef.current.scrollTop = messagesBoxRef.current.scrollHeight;
+    }
+  }, [messagesBox]);
 
   const activeChannelId = (channelItem) => {
     const filter = channelItem.find((channel) => channel.id === channelIdActive);
@@ -82,7 +88,7 @@ function Messages() {
             {`${channelMessages.length} ${t('chat.messagesCounter.messages', { count: (channelMessages.length) })}`}
           </span>
         </div>
-        <div id="messages-box" className="chat-messages overflow-auto px-5 ">
+        <div id="messages-box" ref={messagesBoxRef} className="chat-messages overflow-auto px-5 ">
           {messagesBox}
         </div>
         <div className="mt-auto px-5 py-3">

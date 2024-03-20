@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
@@ -62,12 +61,12 @@ function RegistrationPage() {
       if (err.response.status === 500) {
         dataLoadingError();
       }
-      if (err.isaxioserror && err.response.status === 401) {
+      if (err.isAxiosError && err.response.status === 401) {
         setRegFailed(true);
         inputRef.current.select();
       }
-      if (err.isaxioserror && err.response.status === 409) {
-        formikBag.seterrors({ name: t('signup.alreadyexists') });
+      if (err.isAxiosError && err.response.status === 409) {
+        formikBag.setErrors({ name: t('signup.alreadyExists') });
         setRegFailed(true);
         inputRef.current.select();
       }

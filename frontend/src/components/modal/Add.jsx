@@ -37,7 +37,8 @@ function Add({ onHide }) {
       onHide();
       formikBag.resetForm();
     } catch (error) {
-      formikBag.setErrors({ name: error.message });
+      await formikBag.setErrors({ name: error.message });
+      console.log(formikBag.errors, 'formikBag');
     } finally {
       setIsSubmitting(false);
     }
