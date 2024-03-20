@@ -71,7 +71,7 @@ function Channels() {
                   className={channel.id === channelIdActive ? 'w-100 rounded-0 text-start btn btn-secondary' : 'w-100 rounded-0 text-start btn'}
                   onClick={() => setChannelActive(channel.id)}
                 >
-                  #
+                  <span className="me-1">#</span>
                   {' '}
                   {channel.name.length > 10 ? `${channel.name.substring(0, 10)}...` : filterWords.clean(channel.name)}
                 </button>
@@ -86,7 +86,7 @@ function Channels() {
                   className={channel.id === channelIdActive ? 'w-100 rounded-0 btn btn-secondary' : 'w-100 rounded-0 btn'}
                   onClick={() => setChannelActive(channel.id)}
                 >
-                  #
+                  <span className="me-1">#</span>
                   {' '}
                   { filterWords.clean(channel.name) }
                 </button>
