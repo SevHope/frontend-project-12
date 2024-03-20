@@ -57,7 +57,7 @@ function LoginPage() {
           <Form onSubmit={formik.handleSubmit} className="p-3">
             <fieldset>
               <Form.Group>
-                <Form.Label htmlFor="username" />
+                <Form.Label htmlFor="username">{t('login.login')}</Form.Label>
                 <Form.Control
                   onChange={formik.handleChange}
                   value={formik.values.username}
@@ -71,7 +71,7 @@ function LoginPage() {
                 />
               </Form.Group>
               <Form.Group>
-                <Form.Label htmlFor="password" />
+                <Form.Label htmlFor="password">{t('login.password')}</Form.Label>
                 <Form.Control
                   type="password"
                   onChange={formik.handleChange}
