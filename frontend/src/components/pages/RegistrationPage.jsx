@@ -122,6 +122,7 @@ function RegistrationPage() {
                   </Form.Group>
                   <Button
                     type="submit"
+                    name="general"
                     disabled={isSubmitting}
                     className="w-100 mb-3 btn btn-outline-primary btn-light"
                   >
