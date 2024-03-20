@@ -13,7 +13,8 @@ import { actions as channelsActions } from '../../slices/channelsSlice';
 import { actions as messagesActions } from '../../slices/messagesSlice';
 
 const getAuthHeader = () => {
-  const userId = JSON.parse(localStorage.getItem('userId'));
+  const userId = JSON.parse(localStorage.getItem('userInfo'));
+  console.log(userId, 'userId');
   if (userId && userId.token) {
     return { Authorization: `Bearer ${userId.token}` };
   }
@@ -29,7 +30,7 @@ function ChatPage() {
   const dataLoadingError = () => toast.error(t('error.dataLoadingError'));
 
   useEffect(() => {
-    if (!localStorage.getItem('userId')) {
+    if (!localStorage.getItem('userInfo')) {
       navigate(routes.loginPagePath());
     }
   });

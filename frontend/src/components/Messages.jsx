@@ -10,7 +10,7 @@ import axios from 'axios';
 
 function Messages() {
   const [message, setMessage] = useState('');
-  const { token } = JSON.parse(localStorage.getItem('userId'));
+  const { token } = JSON.parse(localStorage.getItem('userInfo'));
   const { t } = useTranslation();
   const allChannels = useSelector((state) => state.channelsReducer.channels) || [];
   const channelIdActive = useSelector((state) => state.channelsReducer.channelId);
