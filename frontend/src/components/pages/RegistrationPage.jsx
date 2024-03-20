@@ -43,7 +43,7 @@ function RegistrationPage() {
     // eslint-disable-next-line no-shadow
     onSubmit: (values) => {
       setSubmitting(true);
-      axios.post(routes.resistrationPath(), {
+      axios.post(routes.registrationPath(), {
         username: values.username,
         password: values.password,
       })
