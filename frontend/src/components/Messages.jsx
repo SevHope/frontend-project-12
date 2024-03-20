@@ -27,7 +27,7 @@ function Messages() {
 
   const channelMessages = allMessages.filter((mes) => mes.channelid === channelIdActive);
   const messagesBox = channelMessages.map(({ username, id, body }) => {
-    const isCurrentUser = username === JSON.parse(localStorage.getItem('userId')).username;
+    const isCurrentUser = username === JSON.parse(localStorage.getItem('userInfo')).username;
     const messageClasses = isCurrentUser ? 'bg-light' : 'bg-transparent';
     return (
       <div className={`text-break mb-2 ${messageClasses}`} key={id}>
