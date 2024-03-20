@@ -32,7 +32,8 @@ function Messages() {
     return (
       <div className={`text-break mb-2 ${messageClasses}`} key={id}>
         <b>{username}</b>
-        {`: ${filterWords.clean(body)}`}
+        <span>:</span>
+        {filterWords.clean(body)}
       </div>
     );
   });
