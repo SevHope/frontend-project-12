@@ -102,6 +102,7 @@ function Messages() {
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 ref={inputRef}
+                aria-label={t('chat.newMessage')}
               />
               <Button
                 type="submit"

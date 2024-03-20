@@ -36,6 +36,7 @@ export default {
         messages_many: ' сообщений',
       },
       enterMessage: 'Введите сообщение...',
+      newMessage: 'Новое сообщение',
     },
 
     modals: {
