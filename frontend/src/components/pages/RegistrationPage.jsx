@@ -1,25 +1,24 @@
-import axios from 'axios';
-import React, { useEffect, useRef, useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
-import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import React, { useEffect, useRef } from 'react';
+import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
-import { Formik } from 'formik';
+import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
-import useAuth from '../../hooks/auth';
+import axios from 'axios';
+import { Form, Button } from 'react-bootstrap';
 import routes from '../../routes';
+import useAuth from '../../hooks/auth';
 
 function RegistrationPage() {
   const auth = useAuth();
   const { t } = useTranslation();
-  const noNetworkError = () => toast.error(t('error.networkError'));
-  const dataLoadingError = () => toast.error(t('error.dataLoadingError'));
-  const [regFailed, setRegFailed] = useState(false);
-  const inputRef = useRef();
   const navigate = useNavigate();
 
-  const validateSchema = yup.object().shape({
+  const usernameRef = useRef(null);
+  useEffect(() => {
+    usernameRef.current.focus();
+  }, []);
+
+  const registrationSchema = yup.object().shape({
     username: yup.string().trim()
       .min(3, t('signup.numberCharacters'))
       .max(20, t('signup.numberCharacters'))
@@ -27,128 +26,115 @@ function RegistrationPage() {
     password: yup.string().trim()
       .min(6, t('signup.minCharacters'))
       .required(t('signup.obligatoryField')),
-    passwordConfirm: yup.string()
+    confirmPassword: yup.string().trim()
       .required(t('signup.obligatoryField'))
       .oneOf([yup.ref('password'), null], t('signup.passwordsMustMatch')),
   });
 
-  useEffect(() => {
-    inputRef.current.focus();
-  }, []);
-
-  const initialValues = {
-    username: '',
-    password: '',
-    passwordConfirm: '',
-  };
-
-  const onSubmit = async (values, formikBag) => {
-    try {
-      await validateSchema.validate(values);
-      await axios.post(routes.registrationPath(), values);
-      setRegFailed(false);
-      const response = await axios.post(routes.loginPath(), values);
-      localStorage.setItem('userId', JSON.stringify(response.data));
-      auth.login();
-      auth.username = response.data.username;
-      navigate('/');
-    } catch (err) {
-      formikBag.setErrors({ name: err.message });
-      formikBag.setSubmitting(false);
-      if (err.message === 'network error') {
-        noNetworkError();
-      }
-      if (err.response.status === 500) {
-        dataLoadingError();
-      }
-      if (err.isAxiosError && err.response.status === 401) {
-        setRegFailed(true);
-        inputRef.current.select();
-      }
-      if (err.isAxiosError && err.response.status === 409) {
-        formikBag.setErrors({ name: t('signup.alreadyExists') });
-        setRegFailed(true);
-        inputRef.current.select();
-      }
-      throw err;
-    }
-  };
+  const {
+    values, errors, touched, handleChange, handleSubmit, handleBlur, setSubmitting, isSubmitting,
+  } = useFormik({
+    initialValues: {
+      username: '',
+      password: '',
+      confirmPassword: '',
+    },
+    validationSchema: registrationSchema,
+    // eslint-disable-next-line no-shadow
+    onSubmit: (values) => {
+      setSubmitting(true);
+      axios.post(routes.resistrationPath(), {
+        username: values.username,
+        password: values.password,
+      })
+        .then((response) => {
+          auth.logIn(response);
+          navigate(routes.chatPagePath());
+        })
+        .catch((err) => {
+          if (err.response.status === 409) {
+            errors.username = t('signup.alreadyExists');
+            return setSubmitting(false);
+          }
+          return setSubmitting(false);
+        });
+    },
+  });
 
   return (
-    <div className="container-fluid">
-      <div className="row justify-content-center pt-5">
-        <div className="form-group border col-4">
-          <Formik
-            initialValues={initialValues}
-            validationSchema={validateSchema}
-            onSubmit={onSubmit}
-            validateOnChange
-          >
-            {({
-              values, errors, touched, handleChange, handleBlur, handleSubmit,
-            }) => (
-              <Form className="p-3 bg-light" autoComplete="off" onSubmit={handleSubmit}>
-                <fieldset>
-                  <legend className="mb-4 text-center fs-4 fw-bold">{t('signup.registration')}</legend>
-                  <Form.Group>
+    <>
+      <div className="container-fluid h-100">
+        <div className="row justify-content-center align-content-center h-100">
+          <div className="col-12 col-md-8 col-xxl-6">
+            <div className="card shadow-sm">
+              <div className="card-body d-flex flex-column flex-md-row justify-content-around align-items-center p-5">
+                <Form className="w-50" onSubmit={handleSubmit}>
+                  <h1 className="text-center mb-4">{t('signup.registration')}</h1>
+                  <Form.Group className="form-floating mb-3">
                     <Form.Control
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.username}
                       placeholder={t('signup.userName')}
                       name="username"
+                      autoComplete="username"
+                      required=""
                       id="username"
-                      required
-                      autoComplete="new-password"
-                      ref={inputRef}
-                      isInvalid={regFailed}
-                    />
-                    {touched.username && errors.username && (
-                    <div className="error text-danger">{errors.username}</div>
-                    )}
-                  </Form.Group>
-                  <Form.Group>
-                    <Form.Control
+                      className={errors.username && touched.username ? 'form-control is-invalid' : 'form-control'}
                       onChange={handleChange}
-                      value={values.password}
-                      className="mt-3"
-                      type="password"
+                      value={values.username}
+                      onBlur={handleBlur}
+                      ref={usernameRef}
+                    />
+                    <div className="invalid-tooltip">{errors.username}</div>
+                    <Form.Label className="form-label" htmlFor="username">{t('signup.userName')}</Form.Label>
+                  </Form.Group>
+                  <Form.Group className="form-floating mb-3">
+                    <Form.Control
                       placeholder={t('signup.password')}
                       name="password"
-                      id="password"
-                      required
+                      aria-describedby="passwordHelpBlock"
+                      required=""
                       autoComplete="new-password"
-                      isInvalid={regFailed}
-                    />
-                    {touched.password && errors.password && (
-                    <div className="error text-danger">{errors.password}</div>
-                    )}
-                    <Form.Control
-                      onChange={handleChange}
-                      className="mt-3"
-                      placeholder={t('signup.confirmPassword')}
-                      value={values.passwordConfirm}
                       type="password"
-                      name="passwordConfirm"
-                      id="passwordConfirm"
-                      required
-                      autoComplete="new-passwordConfirm"
-                      isInvalid={regFailed}
+                      id="password"
+                      className={errors.password && touched.password ? 'form-control is-invalid' : 'form-control'}
+                      onChange={handleChange}
+                      value={values.password}
+                      onBlur={handleBlur}
                     />
-                    {touched.passwordConfirm && errors.passwordConfirm && (
-                    <div className="error text-danger">{errors.passwordConfirm}</div>
-                    )}
+                    <div className="invalid-tooltip">{errors.password}</div>
+                    <Form.Label className="form-label" htmlFor="password">{t('signup.password')}</Form.Label>
                   </Form.Group>
-                  <div className="text-center mt-5">
-                    <Button type="submit" variant="outline-primary">{t('signup.register')}</Button>
-                  </div>
-                </fieldset>
-              </Form>
-            )}
-          </Formik>
+                  <Form.Group className="form-floating mb-4">
+                    <Form.Control
+                      placeholder={t('signup.confirmPassword')}
+                      name="confirmPassword"
+                      autoComplete="new-password"
+                      required=""
+                      type="password"
+                      id="confirmPassword"
+                      className={errors.confirmPassword && touched.confirmPassword ? 'form-control is-invalid' : 'form-control'}
+                      onChange={handleChange}
+                      value={values.confirmPassword}
+                      onBlur={handleBlur}
+                      disabled={isSubmitting}
+                    />
+                    <div className="invalid-tooltip">{errors.confirmPassword}</div>
+                    <Form.Label className="form-label" htmlFor="confirmPassword">{t('signup.confirmPassword')}</Form.Label>
+                  </Form.Group>
+                  <Button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-100 mb-3 btn btn-outline-primary btn-light"
+                  >
+                    {t('signup.register')}
+                  </Button>
+                </Form>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+      <div className="Toastify" />
+    </>
   );
 }
 
