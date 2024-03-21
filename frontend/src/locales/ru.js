@@ -64,6 +64,7 @@ export default {
       channelCreated: 'Канал создан',
       channelRenamed: 'Канал переименован',
       channelDeleted: 'Канал удалён',
+      channelsName: 'Имя канала',
       plus: '+',
     },
 

@@ -38,7 +38,6 @@ function Add({ onHide }) {
       formikBag.resetForm();
     } catch (error) {
       await formikBag.setErrors({ name: error.message });
-      console.log(formikBag.errors, 'formikBag');
     } finally {
       setIsSubmitting(false);
     }
@@ -62,7 +61,7 @@ function Add({ onHide }) {
       <Modal.Body>
         <form onSubmit={formik.handleSubmit}>
           <FormGroup>
-            <FormLabel htmlFor="name" />
+            <FormLabel htmlFor="name" visuallyHidden>{t('channels.channelsName')}</FormLabel>
             <FormControl
               required
               ref={inputRef}
@@ -70,6 +69,7 @@ function Add({ onHide }) {
               onBlur={formik.handleBlur}
               value={formik.values.name}
               name="name"
+              aria-label=''
             />
             {formik.touched.name && formik.errors.name && (
             <div className="error text-danger">{formik.errors.name}</div>
