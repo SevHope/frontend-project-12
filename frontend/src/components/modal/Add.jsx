@@ -18,7 +18,7 @@ function Add({ onHide }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { t } = useTranslation();
   const allChannels = useSelector((state) => state.channelsReducer.channels) || [];
-  const { username, token } = JSON.parse(localStorage.getItem('userId'));
+  const { username, token } = JSON.parse(localStorage.getItem('userInfo'));
   const notify = () => toast.success(t('channels.channelCreated'));
   const validateSchema = yup.object().shape({
     name: yup.string().trim()
