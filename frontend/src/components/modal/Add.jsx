@@ -69,7 +69,6 @@ function Add({ onHide }) {
               onBlur={formik.handleBlur}
               value={formik.values.name}
               name="name"
-              aria-label=''
             />
             {formik.touched.name && formik.errors.name && (
             <div className="error text-danger">{formik.errors.name}</div>
