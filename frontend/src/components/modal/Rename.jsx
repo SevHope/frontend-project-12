@@ -78,7 +78,7 @@ function Rename({ onHide, item }) {
                   value={values.name}
                   name="name"
                 />
-                <FormLabel htmlFor="name" className="form-label visually-hidden">{t('channels.channelsName')}</FormLabel>
+                <FormLabel htmlFor="name" id="name" className="form-label visually-hidden">{t('channels.channelsName')}</FormLabel>
                 {touched.name && errors.name && (
                 <div className="error text-danger">{errors.name}</div>
                 )}
