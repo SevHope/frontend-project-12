@@ -24,7 +24,7 @@ function Rename({ onHide, item }) {
     inputRef.current.focus();
   }, []);
 
-  const initialValues = { name: item.name };
+  const initialValues = { name: '' };
 
   const validationSchema = yup.object().shape({
     name: yup.string().trim()
