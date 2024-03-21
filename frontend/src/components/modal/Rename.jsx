@@ -67,7 +67,7 @@ function Rename({ onHide, item }) {
           }) => (
             <form onSubmit={handleSubmit}>
               <FormGroup>
-                <FormLabel htmlFor="name" />
+                <FormLabel htmlFor="name" visuallyHidden>{t('channels.channelsName')}</FormLabel>
                 <FormControl
                   required
                   ref={inputRef}
