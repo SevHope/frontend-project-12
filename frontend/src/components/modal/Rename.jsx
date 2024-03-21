@@ -77,8 +77,9 @@ function Rename({ onHide, item }) {
                   onBlur={handleBlur}
                   value={values.name}
                   name="name"
+                  id="name"
                 />
-                <FormLabel htmlFor="name" id="name" className="form-label visually-hidden">{t('channels.channelsName')}</FormLabel>
+                <FormLabel htmlFor="name" className="form-label visually-hidden">{t('channels.channelsName')}</FormLabel>
                 {touched.name && errors.name && (
                 <div className="error text-danger">{errors.name}</div>
                 )}
