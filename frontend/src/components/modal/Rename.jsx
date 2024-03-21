@@ -35,8 +35,10 @@ function Rename({ onHide, item }) {
   });
 
   const onSubmit = async (values, formikBag) => {
+    console.log(values, 'values');
     setIsSubmitting(true);
     const path = [routes.channelsPath(), item.id].join('/');
+    console.log(token, 'token');
     try {
       await validationSchema.validate(values, { abortEarly: false });
       await axios.patch(path, values, { headers: { Authorization: `Bearer ${token}` } });
