@@ -13,6 +13,7 @@ import * as yup from 'yup';
 import routes from '../../routes';
 
 function Rename({ onHide, item }) {
+  console.log(item, 'item');
   const { t } = useTranslation();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const notify = () => toast.success(t('channels.channelRenamed'));
@@ -22,9 +23,10 @@ function Rename({ onHide, item }) {
 
   useEffect(() => {
     inputRef.current.focus();
+    inputRef.current.select();
   }, []);
 
-  const initialValues = { name: '' };
+  const initialValues = { name: item.name };
 
   const validationSchema = yup.object().shape({
     name: yup.string().trim()
