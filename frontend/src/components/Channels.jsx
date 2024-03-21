@@ -94,9 +94,10 @@ function Channels() {
             )}
             {channel.removable && (
               <div style={{ float: 'right' }}>
-                <span className="visually-hidden">{t('modals.channelManagement')}</span>
                 <Dropdown as={ButtonGroup}>
-                  <Dropdown.Toggle split variant="bg-light" id={channel.id} />
+                  <Dropdown.Toggle split variant="bg-light" id={channel.id}>
+                    <span className="visually-hidden">{t('modals.channelManagement')}</span>
+                  </Dropdown.Toggle>
                   <Dropdown.Menu>
                     <Dropdown.Item id={channel.id} onClick={(e) => showModal('removing', e.target.id)}>
                       {t('channels.delete')}
