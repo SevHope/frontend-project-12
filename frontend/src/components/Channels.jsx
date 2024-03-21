@@ -94,6 +94,7 @@ function Channels() {
             )}
             {channel.removable && (
               <div style={{ float: 'right' }}>
+                <span className="visually-hidden">{t('channels.channelManagement')}</span>
                 <Dropdown as={ButtonGroup}>
                   <Dropdown.Toggle split variant="bg-light" id={channel.id} />
                   <Dropdown.Menu>

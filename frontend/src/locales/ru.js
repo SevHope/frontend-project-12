@@ -50,6 +50,7 @@ export default {
       sure: 'Уверены?',
       delete: 'Удалить',
       renameChannel: 'Переименовать канал',
+      channelManagement: 'Управление каналом',
     },
 
     errorPage: {
