@@ -26,7 +26,7 @@ function Rename({ onHide, item }) {
     inputRef.current.select();
   }, []);
 
-  const initialValues = { name: '' };
+  const initialValues = { name: item.name };
 
   const validationSchema = yup.object().shape({
     name: yup.string().trim()
@@ -71,16 +71,14 @@ function Rename({ onHide, item }) {
           }) => (
             <form onSubmit={handleSubmit}>
               <FormGroup>
-                <FormLabel htmlFor="name" visuallyHidden>{t('channels.channelsName')}</FormLabel>
                 <FormControl
-                  required
                   ref={inputRef}
                   onChange={handleChange}
                   onBlur={handleBlur}
                   value={values.name}
-                  data-testid="input-body"
-                  name={t('channels.channelsName')}
+                  name="name"
                 />
+                <FormLabel htmlFor="name" className="form-label visually-hidden">{t('channels.channelsName')}</FormLabel>
                 {touched.name && errors.name && (
                 <div className="error text-danger">{errors.name}</div>
                 )}
