@@ -79,7 +79,7 @@ function Rename({ onHide, item }) {
                   onBlur={handleBlur}
                   value={values.name}
                   data-testid="input-body"
-                  name="name"
+                  name={t('channels.channelsName')}
                 />
                 {touched.name && errors.name && (
                 <div className="error text-danger">{errors.name}</div>
