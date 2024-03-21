@@ -21,7 +21,7 @@ function Remove({ onHide, item }) {
   const dataLoadingError = () => toast.error(t('error.dataLoadingError'));
   const allChannels = useSelector((state) => state.channelsReducer.channels) || [];
   const allMessages = useSelector((state) => state.messagesReducer.messages) || [];
-  const { token } = JSON.parse(localStorage.getItem('userId'));
+  const { token } = JSON.parse(localStorage.getItem('userInfo'));
   const channelMessages = allMessages.filter((message) => message.channelid === item);
   const generateOnSubmit = (e) => {
     e.preventDefault();

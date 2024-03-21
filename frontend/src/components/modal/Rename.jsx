@@ -18,7 +18,7 @@ function Rename({ onHide, item }) {
   const notify = () => toast.success(t('channels.channelRenamed'));
   const inputRef = useRef(null);
   const allChannels = useSelector((state) => state.channelsReducer.channels) || [];
-  const { token } = JSON.parse(localStorage.getItem('userId'));
+  const { token } = JSON.parse(localStorage.getItem('userInfo'));
 
   useEffect(() => {
     inputRef.current.focus();
