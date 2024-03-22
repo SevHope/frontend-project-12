@@ -13,7 +13,6 @@ import * as yup from 'yup';
 import routes from '../../routes';
 
 function Rename({ onHide, item }) {
-  console.log(item, 'item');
   const { t } = useTranslation();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const notify = () => toast.success(t('channels.channelRenamed'));
@@ -37,10 +36,8 @@ function Rename({ onHide, item }) {
   });
 
   const onSubmit = async (values, formikBag) => {
-    console.log(values, 'values');
     setIsSubmitting(true);
     const path = [routes.channelsPath(), item.id].join('/');
-    console.log(token, 'token');
     try {
       await validationSchema.validate(values, { abortEarly: false });
       await axios.patch(path, values, { headers: { Authorization: `Bearer ${token}` } });

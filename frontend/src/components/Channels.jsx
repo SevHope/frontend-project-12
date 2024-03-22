@@ -62,38 +62,19 @@ function Channels() {
       </div>
       <ul id="channels-box" className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block">
         {channels.channels.map((channel) => (
-          <li key={channel.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <li key={channel.id} className="nav-item w-100">
             {channel.removable && (
-              <div style={{ float: 'left' }}>
+              <div role="group" className="d-flex dropdown text-start btn-group">
                 <button
                   type="button"
                   id={channel.id}
-                  className={channel.id === channelIdActive ? 'w-100 rounded-0 text-start btn btn-secondary' : 'w-100 rounded-0 text-start btn'}
+                  className={channel.id === channelIdActive ? 'w-100 rounded-0 text-start text-truncate btn' : 'w-100 text-truncate rounded-0 text-start btn'}
                   onClick={() => setChannelActive(channel.id)}
                 >
                   <span className="me-1">#</span>
                   {' '}
-                  {channel.name.length > 10 ? `${channel.name.substring(0, 10)}...` : filterWords.clean(channel.name)}
+                  {filterWords.clean(channel.name)}
                 </button>
-              </div>
-            )}
-            {!channel.removable && (
-              <div style={{ float: 'left' }}>
-                {' '}
-                <button
-                  type="button"
-                  id={channel.id}
-                  className={channel.id === channelIdActive ? 'w-100 rounded-0 btn btn-secondary' : 'w-100 rounded-0 btn'}
-                  onClick={() => setChannelActive(channel.id)}
-                >
-                  <span className="me-1">#</span>
-                  {' '}
-                  { filterWords.clean(channel.name) }
-                </button>
-              </div>
-            )}
-            {channel.removable && (
-              <div style={{ float: 'right' }}>
                 <Dropdown as={ButtonGroup}>
                   <Dropdown.Toggle split variant="bg-light" id={channel.id}>
                     <span className="visually-hidden">{t('modals.channelManagement')}</span>
@@ -106,6 +87,18 @@ function Channels() {
                   </Dropdown.Menu>
                 </Dropdown>
               </div>
+            )}
+            {!channel.removable && (
+            <button
+              type="button"
+              id={channel.id}
+              className={channel.id === channelIdActive ? 'w-100 text-start rounded-0 btn' : 'text-start w-100 rounded-0 btn'}
+              onClick={() => setChannelActive(channel.id)}
+            >
+              <span className="me-1">#</span>
+              {' '}
+              { filterWords.clean(channel.name) }
+            </button>
             )}
           </li>
         ))}
