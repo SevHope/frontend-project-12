@@ -68,7 +68,7 @@ function Channels() {
                 <button
                   type="button"
                   id={channel.id}
-                  className={channel.id === channelIdActive ? 'w-100 rounded-0 text-start text-truncate btn' : 'w-100 text-truncate rounded-0 text-start btn'}
+                  className={channel.id === channelIdActive ? 'w-100 rounded-0 text-start text-truncate btn btn-secondary' : 'w-100 text-truncate rounded-0 text-start btn'}
                   onClick={() => setChannelActive(channel.id)}
                 >
                   <span className="me-1">#</span>
@@ -92,7 +92,7 @@ function Channels() {
             <button
               type="button"
               id={channel.id}
-              className={channel.id === channelIdActive ? 'w-100 text-start rounded-0 btn' : 'text-start w-100 rounded-0 btn'}
+              className={channel.id === channelIdActive ? 'w-100 text-start rounded-0 btn btn-secondary' : 'text-start w-100 rounded-0 btn'}
               onClick={() => setChannelActive(channel.id)}
             >
               <span className="me-1">#</span>
