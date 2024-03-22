@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React, {
   useEffect, useRef, useState,
 } from 'react';
@@ -14,7 +13,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import * as yup from 'yup';
 import routes from '../../routes';
 
-function Add({ onHide }) {
+const Add = ({ onHide }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { t } = useTranslation();
   const allChannels = useSelector((state) => state.channelsReducer.channels) || [];

@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React, {
   useState, useMemo, useCallback,
 } from 'react';
@@ -6,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import AuthContext from '../contexts/auth';
 import routes from '../routes';
 
-function AuthProvider({ children }) {
+const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
   const [loggedIn, setLoggedIn] = useState(false);
 

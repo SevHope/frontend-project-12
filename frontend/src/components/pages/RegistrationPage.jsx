@@ -8,7 +8,7 @@ import { Form, Button } from 'react-bootstrap';
 import routes from '../../routes';
 import useAuth from '../../hooks/auth';
 
-function RegistrationPage() {
+const RegistrationPage = () => {
   const auth = useAuth();
   const { t } = useTranslation();
   const navigate = useNavigate();

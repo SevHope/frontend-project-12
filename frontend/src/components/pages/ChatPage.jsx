@@ -21,7 +21,7 @@ const getAuthHeader = () => {
   return {};
 };
 
-function ChatPage() {
+const ChatPage = () => {
   const navigate = useNavigate();
   const auth = useAuth();
   const dispatch = useDispatch();
@@ -57,7 +57,7 @@ function ChatPage() {
       }
     };
     fetchData();
-  }, [dispatch, auth, navigate]);
+  }, [dispatch, auth, navigate, noNetworkError, dataLoadingError]);
 
   return (
     <div className="container h-100 my-4 overflow-hidden rounded shadow">

@@ -6,38 +6,17 @@ import {
   Routes,
   Route,
   Link,
-  Navigate,
-  useLocation,
 } from 'react-router-dom';
-import { Button, Navbar, Nav } from 'react-bootstrap';
+import { Navbar, Nav } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { ToastContainer } from 'react-toastify';
 import LoginPage from './components/pages/LoginPage';
 import ChatPage from './components/pages/ChatPage';
 import RegistrationPage from './components/pages/RegistrationPage';
-import useAuth from './hooks/auth';
 import store from './slices/index';
 import ErrorPage from './components/pages/ErrorPage';
-
-function PrivateRoute({ children }) {
-  const auth = useAuth();
-  const location = useLocation();
-  return (
-    auth.loggedIn ? children : <Navigate to="/login" state={{ from: location }} />
-  );
-}
-
-function AuthButton() {
-  const auth = useAuth();
-  const location = useLocation();
-  const { t } = useTranslation();
-
-  return (
-    auth.loggedIn
-      ? <Button onClick={auth.logOut} as={Link} to="/login" state={{ from: location }}>{t('header.goOut')}</Button>
-      : null
-  );
-}
+import PrivateRoute from './components/PrivateRoute';
+import AuthButton from './components/AuthButton';
 
 function App() {
   const { t } = useTranslation();

@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 import useAuth from '../../hooks/auth';
 import routes from '../../routes';
 
-function LoginPage() {
+const LoginPage = () => {
   const auth = useAuth();
   const { t } = useTranslation();
   const [authFailed, setAuthFailed] = useState(false);

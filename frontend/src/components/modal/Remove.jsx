@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React, { useState } from 'react';
 import {
   Modal, FormGroup,
@@ -12,7 +11,7 @@ import routes from '../../routes';
 import { actions as channelsActions } from '../../slices/channelsSlice';
 import { actions as messagesActions } from '../../slices/messagesSlice';
 
-function Remove({ onHide, item }) {
+const Remove = ({ onHide, item }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { t } = useTranslation();
   const dispatch = useDispatch();

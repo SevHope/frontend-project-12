@@ -13,7 +13,7 @@ import resources from './locales/index';
 import App from './App';
 import slices from './slices';
 
-const init = async () => {
+const Init = async () => {
   const socket = io();
   const defaultLanguage = 'ru';
   filterWords.add(filterWords.getDictionary('ru'));
@@ -61,4 +61,4 @@ const init = async () => {
   );
 };
 
-export default init;
+export default Init;

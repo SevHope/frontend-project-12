@@ -12,7 +12,7 @@ import {
 import * as yup from 'yup';
 import routes from '../../routes';
 
-function Rename({ onHide, item }) {
+const Rename= ({ onHide, item }) => {
   const { t } = useTranslation();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const notify = () => toast.success(t('channels.channelRenamed'));

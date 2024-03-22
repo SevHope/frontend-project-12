@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import React, { useState, useRef, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Button, Form } from 'react-bootstrap';
@@ -8,7 +7,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 
-function Messages() {
+const Messages = () => {
   const [message, setMessage] = useState('');
   const { token } = JSON.parse(localStorage.getItem('userInfo'));
   const { t } = useTranslation();

@@ -1,23 +1,27 @@
-/* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable import/no-extraneous-dependencies */
 import React from 'react';
+import { Provider, ErrorBoundary } from '@rollbar/react';
 import { io } from 'socket.io-client';
 import i18next from 'i18next';
 import { BrowserRouter } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
+import filterWords from 'leo-profanity';
 import AuthProvider from './components/AuthProvider';
-import SocketProvider from './components/SocketProvider';
 import { actions as messagesActions } from './slices/messagesSlice';
-import { actions as channelsActions, defaultChannelId } from './slices/channelsSlice';
+import { actions as channelsActions } from './slices/channelsSlice';
 import resources from './locales/index';
 import App from './App';
+import slices from './slices';
 
-const init = async () => {
+const Init = async () => {
   const socket = io();
-  const dispatch = useDispatch();
-  const channelIdActive = useSelector((state) => state.channelsReducer.channelId);
   const defaultLanguage = 'ru';
+  filterWords.add(filterWords.getDictionary('ru'));
+  filterWords.add(filterWords.getDictionary('en'));
+  const rollbarConfig = {
+    accessToken: '5cc7261e8d8b4526ad63f01c3d80eb3d',
+    environment: 'testenv',
+  };
   const i18n = i18next.createInstance();
 
   await i18n.use(initReactI18next).init({
@@ -28,41 +32,33 @@ const init = async () => {
     },
   });
   socket.on('newMessage', (payload) => {
-    console.log('srabotal socket newMessage');
-    dispatch(messagesActions.addMessage(payload));
+    slices.dispatch(messagesActions.addMessage(payload));
   });
   socket.on('newChannel', (payload) => {
-    console.log('srabotal socket newChannel');
-    console.log(payload, 'payload v soket');
-    const { username } = JSON.parse(localStorage.getItem('userId'));
-    if (payload.author === username) {
-      dispatch(channelsActions.setChannelId(payload.id));
-    }
-    dispatch(channelsActions.addChannel(payload));
+    slices.dispatch(channelsActions.addChannel(payload));
   });
   socket.on('removeChannel', (payload) => {
-    if (payload.id === channelIdActive) {
-      dispatch(channelsActions.setChannelId(defaultChannelId));
-    }
-    dispatch(channelsActions.removeChannel(payload));
+    slices.dispatch(channelsActions.removeChannel(payload));
   });
   socket.on('renameChannel', (payload) => {
-    dispatch(channelsActions.renameChannel(payload));
+    slices.dispatch(channelsActions.renameChannel(payload));
   });
 
   return (
-    <React.StrictMode>
-      <I18nextProvider i18n={i18n}>
-        <BrowserRouter>
-          <AuthProvider>
-            <SocketProvider socket={socket}>
-              <App />
-            </SocketProvider>
-          </AuthProvider>
-        </BrowserRouter>
-      </I18nextProvider>
-    </React.StrictMode>
+    <Provider config={rollbarConfig}>
+      <ErrorBoundary>
+        <React.StrictMode>
+          <I18nextProvider i18n={i18n}>
+            <BrowserRouter>
+              <AuthProvider>
+                <App />
+              </AuthProvider>
+            </BrowserRouter>
+          </I18nextProvider>
+        </React.StrictMode>
+      </ErrorBoundary>
+    </Provider>
   );
 };
 
-export default init;
+export default Init;

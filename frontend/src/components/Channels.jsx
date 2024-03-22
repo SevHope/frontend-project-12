@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Dropdown from 'react-bootstrap/Dropdown';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import filterWords from 'leo-profanity';
 import { useTranslation } from 'react-i18next';
 import { actions as channelsActions } from '../slices/channelsSlice';
@@ -25,7 +24,7 @@ const renderModal = ({
   );
 };
 
-function Channels() {
+const  Channels = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const channels = useSelector((state) => state.channelsReducer) || [];
