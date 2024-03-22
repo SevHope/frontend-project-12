@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import { useFormik } from 'formik';
@@ -100,6 +99,6 @@ const LoginPage = () => {
       </div>
     </div>
   );
-}
+};
 
 export default LoginPage;

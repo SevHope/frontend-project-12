@@ -137,6 +137,6 @@ const RegistrationPage = () => {
       <div className="Toastify" />
     </>
   );
-}
+};
 
 export default RegistrationPage;

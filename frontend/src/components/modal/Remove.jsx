@@ -65,6 +65,6 @@ const Remove = ({ onHide, item }) => {
       </Modal.Body>
     </Modal>
   );
-}
+};
 
 export default Remove;

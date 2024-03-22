@@ -6,6 +6,6 @@ const ErrorPage = () => {
   return (
     <div>{t('errorPage.notFound')}</div>
   );
-}
+};
 
 export default ErrorPage;

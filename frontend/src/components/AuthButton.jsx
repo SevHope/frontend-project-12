@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from 'react-bootstrap';
 import useAuth from '../hooks/auth';
 
-function AuthButton() {
+const AuthButton = () => {
   const auth = useAuth();
   const location = useLocation();
   const { t } = useTranslation();

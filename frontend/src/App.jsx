@@ -18,7 +18,7 @@ import ErrorPage from './components/pages/ErrorPage';
 import PrivateRoute from './components/PrivateRoute';
 import AuthButton from './components/AuthButton';
 
-function App() {
+const App = () => {
   const { t } = useTranslation();
   return (
     <Provider store={store}>

@@ -79,6 +79,6 @@ const Add = ({ onHide }) => {
       </Modal.Body>
     </Modal>
   );
-}
+};
 
 export default Add;

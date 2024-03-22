@@ -18,7 +18,7 @@ const renderModal = ({ modalInfo, hideModal, setItems }) => {
   return <Component modalInfo={modalInfo} setItems={setItems} onHide={hideModal} />;
 };
 
-const  App = () => {
+const App = () => {
   const [items, setItems] = useImmer([]);
   const [modalInfo, setModalInfo] = useState({ type: null, item: null });
   const hideModal = () => setModalInfo({ type: null, item: null });
@@ -33,6 +33,6 @@ const  App = () => {
       {renderModal({ modalInfo, hideModal, setItems })}
     </>
   );
-}
+};
 
 export default App;

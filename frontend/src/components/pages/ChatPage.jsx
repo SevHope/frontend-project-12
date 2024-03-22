@@ -26,8 +26,6 @@ const ChatPage = () => {
   const auth = useAuth();
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const noNetworkError = () => toast.error(t('error.networkError'));
-  const dataLoadingError = () => toast.error(t('error.dataLoadingError'));
 
   useEffect(() => {
     if (!localStorage.getItem('userInfo')) {
@@ -36,6 +34,9 @@ const ChatPage = () => {
   });
 
   useEffect(() => {
+    const noNetworkError = () => toast.error(t('error.networkError'));
+    const dataLoadingError = () => toast.error(t('error.dataLoadingError'));
+
     const fetchData = async () => {
       try {
         const channelsData = await axios.get(routes.channelsPath(), {
@@ -47,7 +48,7 @@ const ChatPage = () => {
         dispatch(channelsActions.setChannels(channelsData.data));
         dispatch(messagesActions.setMessages(messagesData.data));
       } catch (err) {
-        if (err.message === 'Network Error') {
+        if (err.message === 'network error') {
           noNetworkError();
         }
         if (err.status === 500) {
@@ -57,7 +58,7 @@ const ChatPage = () => {
       }
     };
     fetchData();
-  }, [dispatch, auth, navigate, noNetworkError, dataLoadingError]);
+  }, [dispatch, auth, navigate, t]);
 
   return (
     <div className="container h-100 my-4 overflow-hidden rounded shadow">
@@ -67,6 +68,6 @@ const ChatPage = () => {
       </div>
     </div>
   );
-}
+};
 
 export default ChatPage;
