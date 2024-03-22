@@ -58,6 +58,6 @@ const App = () => {
       <ToastContainer />
     </Provider>
   );
-}
+};
 
 export default App;

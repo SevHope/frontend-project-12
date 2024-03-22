@@ -14,6 +14,6 @@ const AuthButton = () => {
       ? <Button onClick={auth.logOut} as={Link} to="/login" state={{ from: location }}>{t('header.goOut')}</Button>
       : null
   );
-}
+};
 
 export default AuthButton;
