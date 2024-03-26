@@ -1,5 +1,5 @@
 import ReactDOM from 'react-dom/client';
-import Init from './init';
+import Init from './Init';
 
 const application = async () => {
   const chat = ReactDOM.createRoot(document.getElementById('root'));
