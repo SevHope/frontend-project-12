@@ -19,7 +19,7 @@ const Init = async () => {
   filterWords.add(filterWords.getDictionary('ru'));
   filterWords.add(filterWords.getDictionary('en'));
   const rollbarConfig = {
-    accessToken: '5cc7261e8d8b4526ad63f01c3d80eb3d',
+    accessToken: 'ACCESS_TOKEN',
     environment: 'testenv',
   };
   const i18n = i18next.createInstance();
