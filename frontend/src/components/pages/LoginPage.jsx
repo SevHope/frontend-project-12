@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Link } from 'react-router-dom';
-import useAuth from '../../hooks/auth';
+import useAuth from '../../hooks/useAuth';
 import routes from '../../routes';
 
 const LoginPage = () => {

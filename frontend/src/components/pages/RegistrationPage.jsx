@@ -6,7 +6,7 @@ import * as yup from 'yup';
 import axios from 'axios';
 import { Form, Button } from 'react-bootstrap';
 import routes from '../../routes';
-import useAuth from '../../hooks/auth';
+import useAuth from '../../hooks/useAuth';
 
 const RegistrationPage = () => {
   const auth = useAuth();

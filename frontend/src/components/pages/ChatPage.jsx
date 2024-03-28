@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import useAuth from '../../hooks/auth';
+import useAuth from '../../hooks/useAuth';
 import 'react-toastify/dist/ReactToastify.css';
 import routes from '../../routes';
 import Channels from '../Channels';
