@@ -34,10 +34,6 @@ const Channels = () => {
   const hideModal = () => setModalInfo({ type: null, item: null });
   const showModal = (type, item = null) => setModalInfo({ type, item });
 
-  const setChannelActive = (id) => {
-    dispatch(channelsActions.setChannelId(id));
-  };
-
   return (
     <div className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
       <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
@@ -60,7 +56,7 @@ const Channels = () => {
                   type="button"
                   id={channel.id}
                   className={channel.id === channelIdActive ? 'w-100 rounded-0 text-start text-truncate btn btn-secondary' : 'w-100 text-truncate rounded-0 text-start btn'}
-                  onClick={() => setChannelActive(channel.id)}
+                  onClick={() => dispatch(channelsActions.setChannelId(channel.id))}
                 >
                   <span className="me-1">#</span>
                   {' '}
@@ -84,7 +80,7 @@ const Channels = () => {
               type="button"
               id={channel.id}
               className={channel.id === channelIdActive ? 'w-100 text-start rounded-0 btn btn-secondary' : 'text-start w-100 rounded-0 btn'}
-              onClick={() => setChannelActive(channel.id)}
+              onClick={() => dispatch(channelsActions.setChannelId(channel.id))}
             >
               <span className="me-1">#</span>
               {' '}
