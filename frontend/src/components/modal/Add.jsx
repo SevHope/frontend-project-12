@@ -12,12 +12,14 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import * as yup from 'yup';
 import routes from '../../routes';
+import useAuth from '../../hooks/useAuth';
 
 const Add = ({ onHide }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { t } = useTranslation();
   const allChannels = useSelector((state) => state.channelsReducer.channels) || [];
-  const { username, token } = JSON.parse(localStorage.getItem('userInfo'));
+  const auth = useAuth();
+  const info = JSON.parse(auth.token);
   const notify = () => toast.success(t('channels.channelCreated'));
   const validateSchema = yup.object().shape({
     name: yup.string().trim()
@@ -28,10 +30,10 @@ const Add = ({ onHide }) => {
   });
   const generateOnSubmit = () => async (values, formikBag) => {
     setIsSubmitting(true);
-    const newChannel = { name: values.name, removable: true, author: username };
+    const newChannel = { name: values.name, removable: true, author: info.username };
     try {
       await validateSchema.validate(values, { abortEarly: false });
-      await axios.post(routes.channelsPath(), newChannel, { headers: { Authorization: `Bearer ${token}` } });
+      await axios.post(routes.channelsPath(), newChannel, { headers: { Authorization: `Bearer ${info.token}` } });
       notify();
       onHide();
       formikBag.resetForm();
