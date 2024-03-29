@@ -10,6 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import routes from '../../routes';
 import { actions as channelsActions } from '../../slices/channelsSlice';
 import { actions as messagesActions } from '../../slices/messagesSlice';
+import useAuth from '../../hooks/useAuth';
 
 const Remove = ({ onHide, item }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -20,14 +21,15 @@ const Remove = ({ onHide, item }) => {
   const dataLoadingError = () => toast.error(t('error.dataLoadingError'));
   const allChannels = useSelector((state) => state.channelsReducer.channels) || [];
   const allMessages = useSelector((state) => state.messagesReducer.messages) || [];
-  const { token } = JSON.parse(localStorage.getItem('userInfo'));
+  const auth = useAuth();
+  const info = JSON.parse(auth.token);
   const channelMessages = allMessages.filter((message) => message.channelid === item);
   const generateOnSubmit = (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    axios.delete(`${routes.channelsPath()}/${item}`, { headers: { Authorization: `Bearer ${token}` } })
+    axios.delete(`${routes.channelsPath()}/${item}`, { headers: { Authorization: `Bearer ${info.token}` } })
       .then(() => Promise.all(channelMessages.map(async (message) => {
-        await axios.delete(`${routes.messagesPath()}/${message.id}`, { headers: { Authorization: `Bearer ${token}` } });
+        await axios.delete(`${routes.messagesPath()}/${message.id}`, { headers: { Authorization: `Bearer ${info.token}` } });
       })))
       .then(() => {
         setIsSubmitting(false);

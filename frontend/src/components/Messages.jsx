@@ -6,10 +6,12 @@ import filterWords from 'leo-profanity';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
+import useAuth from '../hooks/useAuth';
 
 const Messages = () => {
   const [message, setMessage] = useState('');
-  const { token } = JSON.parse(localStorage.getItem('userInfo'));
+  const auth = useAuth();
+  const info = JSON.parse(auth.token);
   const { t } = useTranslation();
   const allChannels = useSelector((state) => state.channelsReducer.channels) || [];
   const channelIdActive = useSelector((state) => state.channelsReducer.channelId);
@@ -26,7 +28,7 @@ const Messages = () => {
 
   const channelMessages = allMessages.filter((mes) => mes.channelid === channelIdActive);
   const messagesBox = channelMessages.map(({ username, id, body }) => {
-    const isCurrentUser = username === JSON.parse(localStorage.getItem('userInfo')).username;
+    const isCurrentUser = username === info.username;
     const messageClasses = isCurrentUser ? 'bg-light' : 'bg-transparent';
     return (
       <div className={`text-break mb-2 ${messageClasses}`} key={id}>
@@ -49,7 +51,7 @@ const Messages = () => {
 
   const sendMessage = async (e) => {
     e.preventDefault();
-    const currentName = JSON.parse(localStorage.getItem('userInfo')).username;
+    const currentName = info.username;
     const newMessage = {
       body: filterWords.clean(message),
       channelid: channelIdActive,
@@ -58,7 +60,7 @@ const Messages = () => {
     try {
       await axios.post('/api/v1/messages', newMessage, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${info.token}`,
         },
       });
       setMessage('');

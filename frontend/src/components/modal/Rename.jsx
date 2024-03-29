@@ -11,6 +11,7 @@ import {
 } from 'react-bootstrap';
 import * as yup from 'yup';
 import routes from '../../routes';
+import useAuth from '../../hooks/useAuth';
 
 const Rename = ({ onHide, item }) => {
   const { t } = useTranslation();
@@ -18,7 +19,8 @@ const Rename = ({ onHide, item }) => {
   const notify = () => toast.success(t('channels.channelRenamed'));
   const inputRef = useRef(null);
   const allChannels = useSelector((state) => state.channelsReducer.channels) || [];
-  const { token } = JSON.parse(localStorage.getItem('userInfo'));
+  const auth = useAuth();
+  const info = JSON.parse(auth.token);
 
   useEffect(() => {
     inputRef.current.focus();
@@ -40,7 +42,7 @@ const Rename = ({ onHide, item }) => {
     const path = [routes.channelsPath(), item.id].join('/');
     try {
       await validationSchema.validate(values, { abortEarly: false });
-      await axios.patch(path, values, { headers: { Authorization: `Bearer ${token}` } });
+      await axios.patch(path, values, { headers: { Authorization: `Bearer ${info.token}` } });
       onHide();
       notify();
       formikBag.resetForm();
