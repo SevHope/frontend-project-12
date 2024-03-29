@@ -8,11 +8,14 @@ import routes from '../routes';
 const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
   const [loggedIn, setLoggedIn] = useState(false);
+  const getUser = JSON.parse(localStorage.getItem('userInfo'));
+  const [token, setToken] = useState(getUser ?? null);
 
   const logIn = useCallback((response) => {
     const data = JSON.stringify(response.data);
     localStorage.setItem('userInfo', data);
     setLoggedIn(true);
+    setToken(data);
     navigate(routes.chatPagePath());
   }, [navigate]);
 
@@ -26,7 +29,8 @@ const AuthProvider = ({ children }) => {
     logOut,
     logIn,
     loggedIn,
-  }), [logOut, logIn, loggedIn]);
+    token,
+  }), [logOut, logIn, loggedIn, token]);
 
   return (
     <AuthContext.Provider value={context}>

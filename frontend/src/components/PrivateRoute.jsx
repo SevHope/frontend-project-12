@@ -6,8 +6,9 @@ import routes from '../routes';
 const PrivateRoute = ({ children }) => {
   const auth = useAuth();
   const location = useLocation();
+  console.log(auth.token);
   return (
-    auth.loggedIn ? children : <Navigate to={routes.loginPagePath()} state={{ from: location }} />
+    auth.token ? children : <Navigate to={routes.loginPagePath()} state={{ from: location }} />
   );
 };
 
