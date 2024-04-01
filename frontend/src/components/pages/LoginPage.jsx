@@ -2,15 +2,17 @@ import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import { useFormik } from 'formik';
 import { Button, Form } from 'react-bootstrap';
+import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Link } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 import routes from '../../routes';
 
 const LoginPage = () => {
   const auth = useAuth();
+  const navigate = useNavigate();
+  const user = auth.getUser();
   const { t } = useTranslation();
   const [authFailed, setAuthFailed] = useState(false);
   const inputRef = useRef();
@@ -19,6 +21,11 @@ const LoginPage = () => {
   useEffect(() => {
     inputRef.current.focus();
   }, []);
+  useEffect(() => {
+    if (auth.userToken || user) {
+      navigate(routes.chatPagePath());
+    }
+  }, [navigate]);
 
   const formik = useFormik({
     initialValues: {
@@ -29,7 +36,6 @@ const LoginPage = () => {
       setAuthFailed(false);
       try {
         const res = await axios.post(routes.loginPath(), values);
-        auth.userName = res.data.username;
         auth.logIn(res);
       } catch (err) {
         formik.setSubmitting(false);

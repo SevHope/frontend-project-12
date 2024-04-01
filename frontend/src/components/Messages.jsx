@@ -11,7 +11,7 @@ import useAuth from '../hooks/useAuth';
 const Messages = () => {
   const [message, setMessage] = useState('');
   const auth = useAuth();
-  const info = JSON.parse(auth.token);
+  const user = auth.getUser();
   const { t } = useTranslation();
   const allChannels = useSelector((state) => state.channelsReducer.channels) || [];
   const channelIdActive = useSelector((state) => state.channelsReducer.channelId);
@@ -28,7 +28,7 @@ const Messages = () => {
 
   const channelMessages = allMessages.filter((mes) => mes.channelid === channelIdActive);
   const messagesBox = channelMessages.map(({ username, id, body }) => {
-    const isCurrentUser = username === info.username;
+    const isCurrentUser = username === user.username;
     const messageClasses = isCurrentUser ? 'bg-light' : 'bg-transparent';
     return (
       <div className={`text-break mb-2 ${messageClasses}`} key={id}>
@@ -51,7 +51,7 @@ const Messages = () => {
 
   const sendMessage = async (e) => {
     e.preventDefault();
-    const currentName = info.username;
+    const currentName = user.username;
     const newMessage = {
       body: filterWords.clean(message),
       channelid: channelIdActive,
@@ -60,7 +60,7 @@ const Messages = () => {
     try {
       await axios.post('/api/v1/messages', newMessage, {
         headers: {
-          Authorization: `Bearer ${info.token}`,
+          Authorization: `Bearer ${user.token}`,
         },
       });
       setMessage('');

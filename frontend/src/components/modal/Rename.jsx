@@ -20,7 +20,7 @@ const Rename = ({ onHide, item }) => {
   const inputRef = useRef(null);
   const allChannels = useSelector((state) => state.channelsReducer.channels) || [];
   const auth = useAuth();
-  const info = JSON.parse(auth.token);
+  const user = auth.getUser();
 
   useEffect(() => {
     inputRef.current.focus();
@@ -42,7 +42,7 @@ const Rename = ({ onHide, item }) => {
     const path = [routes.channelsPath(), item.id].join('/');
     try {
       await validationSchema.validate(values, { abortEarly: false });
-      await axios.patch(path, values, { headers: { Authorization: `Bearer ${info.token}` } });
+      await axios.patch(path, values, { headers: { Authorization: `Bearer ${user.token}` } });
       onHide();
       notify();
       formikBag.resetForm();

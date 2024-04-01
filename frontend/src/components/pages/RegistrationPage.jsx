@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react';
 import { useFormik } from 'formik';
-import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import axios from 'axios';
@@ -11,7 +10,6 @@ import useAuth from '../../hooks/useAuth';
 const RegistrationPage = () => {
   const auth = useAuth();
   const { t } = useTranslation();
-  const navigate = useNavigate();
 
   const usernameRef = useRef(null);
   useEffect(() => {
@@ -49,7 +47,6 @@ const RegistrationPage = () => {
       })
         .then((response) => {
           auth.logIn(response);
-          navigate(routes.chatPagePath());
         })
         .catch((err) => {
           if (err.response.status === 409) {

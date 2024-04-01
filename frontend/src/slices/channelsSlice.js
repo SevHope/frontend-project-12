@@ -19,25 +19,21 @@ const channelsSlice = createSlice({
       state.channelId = payload;
     },
     moveToChannel(state, { payload }) {
-      state.channelId = payload.id;
+      state.channelId = payload;
     },
     addChannel(state, { payload }) {
-      const { username } = JSON.parse(localStorage.getItem('userInfo'));
-      if (payload.author === username) {
-        state.channelId = payload.id;
-      }
       state.channels.push(payload);
     },
     removeChannel(state, { payload }) {
       const updateChannels = state.channels.filter((channel) => channel.id !== payload.id);
-      if (state.channelId === payload.id) {
-        state.channelId = defaultChannelId;
-      }
       state.channels = updateChannels;
     },
     renameChannel(state, { payload }) {
       const renamedChannel = state.channels.find((channel) => channel.id === payload.id);
       renamedChannel.name = payload.name;
+    },
+    getState(state) {
+      return state.channels;
     },
   },
 });

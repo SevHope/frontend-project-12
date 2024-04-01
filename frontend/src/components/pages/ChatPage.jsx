@@ -12,26 +12,18 @@ import Messages from '../Messages';
 import { actions as channelsActions } from '../../slices/channelsSlice';
 import { actions as messagesActions } from '../../slices/messagesSlice';
 
-const getAuthHeader = () => {
-  const userId = JSON.parse(localStorage.getItem('userInfo'));
-  console.log(userId, 'userId');
-  if (userId && userId.token) {
-    return { Authorization: `Bearer ${userId.token}` };
-  }
-  return {};
-};
-
 const ChatPage = () => {
   const navigate = useNavigate();
   const auth = useAuth();
+  const user = auth.getUser();
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
   useEffect(() => {
-    if (!localStorage.getItem('userInfo')) {
+    if (!auth.userToken) {
       navigate(routes.loginPagePath());
     }
-  });
+  }, [navigate]);
 
   useEffect(() => {
     const noNetworkError = () => toast.error(t('error.networkError'));
@@ -40,10 +32,10 @@ const ChatPage = () => {
     const fetchData = async () => {
       try {
         const channelsData = await axios.get(routes.channelsPath(), {
-          headers: getAuthHeader(),
+          headers: { Authorization: `Bearer ${user.token}` },
         });
         const messagesData = await axios.get(routes.messagesPath(), {
-          headers: getAuthHeader(),
+          headers: { Authorization: `Bearer ${user.token}` },
         });
         dispatch(channelsActions.setChannels(channelsData.data));
         dispatch(messagesActions.setMessages(messagesData.data));
