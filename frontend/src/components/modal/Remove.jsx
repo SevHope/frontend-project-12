@@ -10,9 +10,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import routes from '../../routes';
 import { actions as channelsActions, defaultChannelId } from '../../slices/channelsSlice';
 import { actions as messagesActions } from '../../slices/messagesSlice';
+import { actions as modalActions } from '../../slices/modalSlice';
 import useAuth from '../../hooks/useAuth';
 
-const Remove = ({ onHide, item }) => {
+const Remove = ({ item }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -24,10 +25,11 @@ const Remove = ({ onHide, item }) => {
   const auth = useAuth();
   const user = auth.getUser();
   const channelMessages = allMessages.filter((message) => message.channelid === item);
+  const onHide = () => dispatch(modalActions.closeModal());
   const generateOnSubmit = (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    axios.delete(`${routes.channelsPath()}/${item}`, { headers: { Authorization: `Bearer ${user.token}` } })
+    axios.delete(`${routes.channelsPath()}/${item.id}`, { headers: { Authorization: `Bearer ${user.token}` } })
       .then(() => Promise.all(channelMessages.map(async (message) => {
         await axios.delete(`${routes.messagesPath()}/${message.id}`, { headers: { Authorization: `Bearer ${user.token}` } });
       })))

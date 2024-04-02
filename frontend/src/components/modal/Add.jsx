@@ -15,8 +15,9 @@ import * as yup from 'yup';
 import routes from '../../routes';
 import useAuth from '../../hooks/useAuth';
 import { actions as channelsActions } from '../../slices/channelsSlice';
+import { actions as modalActions } from '../../slices/modalSlice';
 
-const Add = ({ onHide }) => {
+const Add = () => {
   const socket = io();
   const dispatch = useDispatch();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -27,7 +28,9 @@ const Add = ({ onHide }) => {
   const notify = () => toast.success(t('channels.channelCreated'));
   socket.on('newChannel', (payload) => {
     dispatch(channelsActions.moveToChannel(payload.id));
+    socket.off('newChannel');
   });
+  const onHide = () => dispatch(modalActions.closeModal());
   const validateSchema = yup.object().shape({
     name: yup.string().trim()
       .min(3, t('modals.numberCharacters'))
@@ -51,7 +54,7 @@ const Add = ({ onHide }) => {
     }
   };
   const formik = useFormik({
-    onSubmit: generateOnSubmit({ onHide }),
+    onSubmit: generateOnSubmit(),
     initialValues: { name: '' },
   });
 

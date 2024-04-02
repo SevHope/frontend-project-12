@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Formik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
@@ -12,8 +12,10 @@ import {
 import * as yup from 'yup';
 import routes from '../../routes';
 import useAuth from '../../hooks/useAuth';
+import { actions as modalActions } from '../../slices/modalSlice';
 
-const Rename = ({ onHide, item }) => {
+const Rename = ({ item }) => {
+  const dispatch = useDispatch();
   const { t } = useTranslation();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const notify = () => toast.success(t('channels.channelRenamed'));
@@ -21,6 +23,7 @@ const Rename = ({ onHide, item }) => {
   const allChannels = useSelector((state) => state.channelsReducer.channels) || [];
   const auth = useAuth();
   const user = auth.getUser();
+  const onHide = () => dispatch(modalActions.closeModal());
 
   useEffect(() => {
     inputRef.current.focus();
