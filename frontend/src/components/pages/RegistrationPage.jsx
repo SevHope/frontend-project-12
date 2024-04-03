@@ -3,12 +3,14 @@ import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { Form, Button } from 'react-bootstrap';
 import routes from '../../routes';
 import useAuth from '../../hooks/useAuth';
 
 const RegistrationPage = () => {
   const auth = useAuth();
+  const navigate = useNavigate();
   const { t } = useTranslation();
 
   const usernameRef = useRef(null);
@@ -47,6 +49,7 @@ const RegistrationPage = () => {
       })
         .then((response) => {
           auth.logIn(response);
+          navigate(routes.chatPagePath());
         })
         .catch((err) => {
           if (err.response.status === 409) {
