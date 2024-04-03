@@ -14,9 +14,9 @@ const Messages = () => {
   const auth = useAuth();
   const user = auth.getUser();
   const { t } = useTranslation();
-  const allChannels = useSelector((state) => state.channelsReducer.channels || []);
+  const allChannels = useSelector((state) => state.channelsReducer.channels);
   const channelIdActive = useSelector((state) => state.channelsReducer.channelId);
-  const allMessages = useSelector((state) => state.messagesReducer.messages || []);
+  const allMessages = useSelector((state) => state.messagesReducer.messages);
   const noNetworkError = () => toast.error(t('error.networkError'));
   const dataLoadingError = () => toast.error(t('error.dataLoadingError'));
   const messagesBoxRef = useRef();

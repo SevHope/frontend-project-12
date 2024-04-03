@@ -12,7 +12,7 @@ import ModalComponent from './modal/Modal';
 const Channels = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const channels = useSelector((state) => state.channelsReducer) || [];
+  const channels = useSelector((state) => state.channelsReducer);
   const channelIdActive = useSelector((state) => state.channelsReducer.channelId);
   const setShowModal = (type, item = null) => dispatch(modalActions.showModal({ type, item }));
 
