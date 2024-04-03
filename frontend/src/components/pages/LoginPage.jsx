@@ -11,6 +11,7 @@ import routes from '../../routes';
 
 const LoginPage = () => {
   const auth = useAuth();
+  // console.log(auth.user, 'auth.user');
   const navigate = useNavigate();
   const user = auth.getUser();
   const { t } = useTranslation();
@@ -37,6 +38,7 @@ const LoginPage = () => {
       try {
         const res = await axios.post(routes.loginPath(), values);
         auth.logIn(res);
+        navigate(routes.chatPagePath());
       } catch (err) {
         formik.setSubmitting(false);
         if (err.message === 'Network Error') {

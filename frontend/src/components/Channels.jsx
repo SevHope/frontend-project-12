@@ -5,7 +5,7 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import filterWords from 'leo-profanity';
 import { useTranslation } from 'react-i18next';
 import { actions as channelsActions } from '../slices/channelsSlice';
-import PlusIcon from '../fixtures/Plus';
+import PlusIcon from '../images/Plus';
 import { actions as modalActions } from '../slices/modalSlice';
 import ModalComponent from './modal/Modal';
 
@@ -39,7 +39,7 @@ const Channels = () => {
                     type="button"
                     id={channel.id}
                     className={channel.id === channelIdActive ? 'w-100 rounded-0 text-start text-truncate btn btn-secondary' : 'w-100 text-truncate rounded-0 text-start btn'}
-                    onClick={() => dispatch(channelsActions.setChannelId(channel.id))}
+                    onClick={() => dispatch(channelsActions.moveToChannel(channel.id))}
                   >
                     <span className="me-1">#</span>
                     {' '}
@@ -63,7 +63,7 @@ const Channels = () => {
                 type="button"
                 id={channel.id}
                 className={channel.id === channelIdActive ? 'w-100 text-start rounded-0 btn btn-secondary' : 'text-start w-100 rounded-0 btn'}
-                onClick={() => dispatch(channelsActions.setChannelId(channel.id))}
+                onClick={() => dispatch(channelsActions.moveToChannel(channel.id))}
               >
                 <span className="me-1">#</span>
                 {' '}

@@ -4,7 +4,7 @@
   "engines": {
     "node": "18.x"
   },
-  "description": "[![Actions Status](https://github.com/SevHope/frontend-project-12/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/SevHope/frontend-project-12/actions)",
+  "description": "Real-time application on React",
   "main": "frontend/src/index.js",
   "scripts": {
     "build": "npm run build --prefix frontend",
@@ -23,7 +23,6 @@
   },
   "homepage": "https://github.com/SevHope/frontend-project-12#readme",
   "dependencies": {
-    "@hexlet/chat-server": "^2.0.0",
-    "bootstrap": "^5.3.2"
+    "@hexlet/chat-server": "^2.0.0"
   }
 }

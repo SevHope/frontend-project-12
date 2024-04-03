@@ -17,6 +17,7 @@ import store from './slices/index';
 import ErrorPage from './components/pages/ErrorPage';
 import PrivateRoute from './components/PrivateRoute';
 import AuthButton from './components/AuthButton';
+import routes from './routes';
 
 const App = () => {
   const { t } = useTranslation();
@@ -30,7 +31,7 @@ const App = () => {
       </Navbar>
 
       <Routes>
-        <Route path="/login" element={<LoginPage />} />
+        <Route path={routes.loginPagePath()} element={<LoginPage />} />
         <Route
           path="/"
           element={(
@@ -40,7 +41,7 @@ const App = () => {
             )}
         />
         <Route
-          path="/chat"
+          path={routes.chatPagePath()}
           element={(
             <PrivateRoute>
               <ChatPage />
