@@ -24,15 +24,11 @@ const Remove = ({ item }) => {
   const allMessages = useSelector((state) => state.messagesReducer.messages) || [];
   const auth = useAuth();
   const user = auth.getUser();
-  const channelMessages = allMessages.filter((message) => message.channelid === item);
   const onHide = () => dispatch(modalActions.closeModal());
   const generateOnSubmit = (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     axios.delete(`${routes.channelsPath()}/${item.id}`, { headers: { Authorization: `Bearer ${user.token}` } })
-      .then(() => Promise.all(channelMessages.map(async (message) => {
-        await axios.delete(`${routes.messagesPath()}/${message.id}`, { headers: { Authorization: `Bearer ${user.token}` } });
-      })))
       .then(() => {
         setIsSubmitting(false);
         const updatedChannels = allChannels.filter((channel) => channel.id !== item);
