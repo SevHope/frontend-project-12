@@ -28,7 +28,7 @@ const Remove = ({ item }) => {
   const generateOnSubmit = (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    axios.delete(`${routes.channelsPath()}/${item.id}`, { headers: { Authorization: `Bearer ${user.token}` } })
+    axios.delete(`${routes.channelsPath()}/${item}`, { headers: { Authorization: `Bearer ${user.token}` } })
       .then(() => {
         setIsSubmitting(false);
         const updatedChannels = allChannels.filter((channel) => channel.id !== item);

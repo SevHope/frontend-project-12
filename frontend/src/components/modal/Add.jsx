@@ -5,7 +5,6 @@ import { useFormik } from 'formik';
 import {
   Modal, FormGroup, FormControl, FormLabel,
 } from 'react-bootstrap';
-// import { io } from 'socket.io-client';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
@@ -13,14 +12,11 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import * as yup from 'yup';
 import routes from '../../routes';
-import useSocket from '../../hooks/useSocket';
 import useAuth from '../../hooks/useAuth';
-// import { actions as channelsActions } from '../../slices/channelsSlice';
+import { actions as channelsActions } from '../../slices/channelsSlice';
 import { actions as modalActions } from '../../slices/modalSlice';
 
 const Add = () => {
-  // const socket = io();
-  const socket = useSocket();
   const dispatch = useDispatch();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { t } = useTranslation();
@@ -28,11 +24,6 @@ const Add = () => {
   const auth = useAuth();
   const user = auth.getUser;
   const notify = () => toast.success(t('channels.channelCreated'));
-  // useEffect(() => {
-  // socket.on('newChannel', (payload) => {
-  // dispatch(channelsActions.moveToChannel(payload.id));
-  // });
-  // }, [socket]);
   const onHide = () => dispatch(modalActions.closeModal());
   const validateSchema = yup.object().shape({
     name: yup.string().trim()
@@ -46,8 +37,8 @@ const Add = () => {
     const newChannel = { name: values.name, removable: true, author: user.username };
     try {
       await validateSchema.validate(values, { abortEarly: false });
-      await axios.post(routes.channelsPath(), newChannel, { headers: { Authorization: `Bearer ${user.token}` } });
-      await socket.addChannel(values);
+      const response = await axios.post(routes.channelsPath(), newChannel, { headers: { Authorization: `Bearer ${user.token}` } });
+      dispatch(channelsActions.moveToChannel(response.data.id));
       notify();
       onHide();
       formikBag.resetForm();
