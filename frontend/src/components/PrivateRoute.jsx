@@ -7,7 +7,8 @@ const PrivateRoute = ({ children }) => {
   const auth = useAuth();
   const location = useLocation();
   return (
-    auth.userToken ? children : <Navigate to={routes.loginPagePath()} state={{ from: location }} />
+    auth.getUser !== null ? children
+      : <Navigate to={routes.loginPagePath()} state={{ from: location }} />
   );
 };
 

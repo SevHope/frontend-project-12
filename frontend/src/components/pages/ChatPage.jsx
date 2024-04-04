@@ -15,15 +15,15 @@ import { actions as messagesActions } from '../../slices/messagesSlice';
 const ChatPage = () => {
   const navigate = useNavigate();
   const auth = useAuth();
-  const user = auth.getUser();
+  const user = auth.getUser;
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
   useEffect(() => {
-    if (!auth.userToken) {
+    if (user.token === null) {
       navigate(routes.loginPagePath());
     }
-  }, [navigate]);
+  }, [navigate, user.token]);
 
   useEffect(() => {
     const noNetworkError = () => toast.error(t('error.networkError'));
@@ -50,7 +50,7 @@ const ChatPage = () => {
       }
     };
     fetchData();
-  }, [dispatch, auth, navigate, t]);
+  }, [dispatch, auth, navigate, t, user.token]);
 
   return (
     <div className="container h-100 my-4 overflow-hidden rounded shadow">

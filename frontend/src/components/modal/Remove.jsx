@@ -23,7 +23,7 @@ const Remove = ({ item }) => {
   const allChannels = useSelector((state) => state.channelsReducer.channels) || [];
   const allMessages = useSelector((state) => state.messagesReducer.messages) || [];
   const auth = useAuth();
-  const user = auth.getUser();
+  const user = auth.getUser;
   const onHide = () => dispatch(modalActions.closeModal());
   const generateOnSubmit = (e) => {
     e.preventDefault();

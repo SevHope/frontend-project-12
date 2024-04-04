@@ -12,7 +12,7 @@ import SendIcon from '../images/Send';
 const Messages = () => {
   const [message, setMessage] = useState('');
   const auth = useAuth();
-  const user = auth.getUser();
+  const user = auth.getUser;
   const { t } = useTranslation();
   const allChannels = useSelector((state) => state.channelsReducer.channels);
   const channelIdActive = useSelector((state) => state.channelsReducer.channelId);

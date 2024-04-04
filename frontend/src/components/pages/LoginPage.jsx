@@ -11,9 +11,7 @@ import routes from '../../routes';
 
 const LoginPage = () => {
   const auth = useAuth();
-  // console.log(auth.user, 'auth.user');
   const navigate = useNavigate();
-  const user = auth.getUser();
   const { t } = useTranslation();
   const [authFailed, setAuthFailed] = useState(false);
   const inputRef = useRef();
@@ -23,10 +21,10 @@ const LoginPage = () => {
     inputRef.current.focus();
   }, []);
   useEffect(() => {
-    if (auth.userToken || user) {
+    if (auth.getUser !== null) {
       navigate(routes.chatPagePath());
     }
-  }, [navigate]);
+  }, [navigate, auth.getUser]);
 
   const formik = useFormik({
     initialValues: {

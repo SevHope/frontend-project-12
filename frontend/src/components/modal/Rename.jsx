@@ -22,7 +22,7 @@ const Rename = ({ item }) => {
   const inputRef = useRef(null);
   const allChannels = useSelector((state) => state.channelsReducer.channels) || [];
   const auth = useAuth();
-  const user = auth.getUser();
+  const user = auth.getUser;
   const onHide = () => dispatch(modalActions.closeModal());
 
   useEffect(() => {

@@ -24,7 +24,7 @@ const Add = () => {
   const { t } = useTranslation();
   const allChannels = useSelector((state) => state.channelsReducer.channels) || [];
   const auth = useAuth();
-  const user = auth.getUser();
+  const user = auth.getUser;
   const notify = () => toast.success(t('channels.channelCreated'));
   socket.on('newChannel', (payload) => {
     dispatch(channelsActions.moveToChannel(payload.id));

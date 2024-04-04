@@ -11,7 +11,7 @@ const AuthButton = () => {
   const { t } = useTranslation();
 
   return (
-    auth.userToken
+    auth.getUser !== null
       ? <Button onClick={auth.logOut} as={Link} to={routes.loginPagePath()} state={{ from: location }}>{t('header.goOut')}</Button>
       : null
   );
