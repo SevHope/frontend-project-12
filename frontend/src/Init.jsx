@@ -6,6 +6,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
 import filterWords from 'leo-profanity';
 import AuthProvider from './components/AuthProvider';
+import SocketProvider from './components/SocketProvider';
 import { actions as messagesActions } from './slices/messagesSlice';
 import { actions as channelsActions } from './slices/channelsSlice';
 import resources from './locales/index';
@@ -34,6 +35,7 @@ const Init = async () => {
     slices.dispatch(messagesActions.addMessage(payload));
   });
   socket.on('newChannel', (payload) => {
+    console.log('socket v init');
     slices.dispatch(channelsActions.addChannel(payload));
   });
   socket.on('removeChannel', (payload) => {
@@ -50,7 +52,9 @@ const Init = async () => {
           <I18nextProvider i18n={i18n}>
             <BrowserRouter>
               <AuthProvider>
-                <App />
+                <SocketProvider socket={socket}>
+                  <App />
+                </SocketProvider>
               </AuthProvider>
             </BrowserRouter>
           </I18nextProvider>
